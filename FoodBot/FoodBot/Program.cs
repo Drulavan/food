@@ -1,4 +1,5 @@
 ﻿using FoodBot.Conversations;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
@@ -11,6 +12,11 @@ namespace FoodBot
     {
         private static void Main(string[] args)
         {
+
+            IConfiguration configuration = new ConfigurationBuilder()
+               .AddJsonFile("appsettings.json", true, true)
+               .Build();
+
             //собираем беседы в контейнер
             var collection = new ServiceCollection();
             Assembly ConsoleAppAssembly = typeof(Program).Assembly;
@@ -25,7 +31,7 @@ namespace FoodBot
             {
                 collection.AddTransient(typeof(IConversation), type);
             }
-            var client = new TelegramBotClient("988895019:AAEJjB5p3dgnoDG9VTASPLABE-jysVPilxI");
+            var client = new TelegramBotClient(configuration["BotKey"]);
 
             collection.AddSingleton(client);
             var serviceProvider = collection.BuildServiceProvider();
