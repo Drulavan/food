@@ -19,22 +19,30 @@ namespace FoodBot.Conversations
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
-                                                new[] // row 1
+                                          new[] // row 1
                                                 {
-                                                               new KeyboardButton("Регистрация")
+                                                               new KeyboardButton("Геолокация")
+                                                               {
+                                                                   RequestLocation = true
+                                                               }
+                                                               
                                                 },
-                                                  new[] // row 2
-                                                {
-                                                              new KeyboardButton("О нас"),
-                                                                new KeyboardButton("Описание")
-                                                },
-      },
+                                               
+                                                
+          },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            userState.ConversationState = ConversationState.Registration;
-            Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
+          
+           Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
+        
+                       
+                         userState.ConversationState = ConversationState.Registration;
+                        
             return userState;
         }
+        
     }
+    
+
 }
