@@ -4,6 +4,9 @@ using System.Text;
 
 namespace FoodBot.Parsers
 {
+    /// <summary>
+    /// Это класс уведомления
+    /// </summary>
     public class Notice
     {
         /// <summary>
@@ -25,8 +28,14 @@ namespace FoodBot.Parsers
         /// </summary>
         public DateTime? Date { get; set; }
 
+        /// <summary>
+        /// Источник объявления
+        /// </summary>
         public Source Source { get; set; }
 
+        /// <summary>
+        /// Ссылки на фото
+        /// </summary>
         public List<string> PhotosUrl { get; set; }
     }
 }

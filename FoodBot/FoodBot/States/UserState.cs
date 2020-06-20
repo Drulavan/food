@@ -1,5 +1,8 @@
 ﻿namespace FoodBot.States
 {
+    /// <summary>
+    /// Класс состояний пользователя
+    /// </summary>
     public class UserState
     {
         public UserState(long id)
