@@ -17,7 +17,6 @@ namespace FoodBot
     {
         private static async Task Main(string[] args)
         {
-            
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
                .Build();
@@ -57,27 +56,23 @@ namespace FoodBot
             client.OnCallbackQuery += engine.BotOnCallbackQuery;
 
             // endless background job
-            Thread workerThread = new Thread( () =>
-            {
-                while (true)
-                {
-                    var jobs = serviceProvider.GetServices<IJob>().ToList();
-                    foreach (IJob j in jobs)
-                    {
-                         j.Execute();
-                    };
-                    Thread.Sleep(10000);
-                }
-            });
+            Thread workerThread = new Thread(() =>
+           {
+               while (true)
+               {
+                   var jobs = serviceProvider.GetServices<IJob>().ToList();
+                   foreach (IJob j in jobs)
+                   {
+                       j.Execute();
+                   };
+                   Thread.Sleep(10000);
+               }
+           });
             workerThread.Start();
 
             client.StartReceiving();
             Console.ReadLine();
             client.StopReceiving();
-     
         }
-
-
-       
     }
 }

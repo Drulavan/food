@@ -3,7 +3,6 @@ using Amazon.Polly;
 using Amazon.Polly.Model;
 using FoodBot.States;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -19,13 +18,16 @@ namespace FoodBot.Parsers.Jobs
     /// </summary>
     public class ParseVkJob : IJob
     {
-        VkParser parser;
-        TelegramBotClient client;
-        List<UserState> states;
-        AmazonPollyClient awspc;
+        private VkParser parser;
+        private TelegramBotClient client;
+        private List<UserState> states;
+        private AmazonPollyClient awspc;
+        private OCR ocr;
+
         public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states)
         {
             parser = new VkParser(configuration);
+            ocr = new OCR(configuration);
             this.states = states;
             this.client = client;
             awspc = new AmazonPollyClient(configuration["AWSID"], configuration["AWSAccessKey"], RegionEndpoint.USEast2);
@@ -47,12 +49,19 @@ namespace FoodBot.Parsers.Jobs
             {
                 Text = "Ссылка на пост",
                 Url = n.Url
-            }); 
+            });
+            string imageText = string.Empty;
+            // здесь запрашиваем текст с картинки
+            if (n.PhotosUrl.Count > 0)
+            {
+                imageText = await ocr.GetImageTextAsync(n.PhotosUrl[0]);
+            }
 
+            string caption = !String.IsNullOrEmpty(n.FullText) ? $"{n.FullText}" : $"{imageText}";
             // здесь идем в Amazon превратить текст в аудио
             SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest
             {
-                Text = $"{n.FullText}",
+                Text = $"{caption}",
                 OutputFormat = OutputFormat.Ogg_vorbis,
                 SampleRate = "16000",
                 VoiceId = VoiceId.Tatyana
@@ -63,20 +72,18 @@ namespace FoodBot.Parsers.Jobs
             {
                 using var defaultPhoto = File.OpenRead(".\\Resources\\boxes_food.png");
                 sres.AudioStream.CopyTo(fileStream);
-                fileStream.Seek(0, SeekOrigin.Begin);
+              
                 foreach (var state in states)
                 {
+                    fileStream.Seek(0, SeekOrigin.Begin);
                     var photo = n.PhotosUrl.Count > 0 ?
                         new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
-                    await client.SendPhotoAsync(state.Id, photo, caption: $"{n.FullText}", replyMarkup: inlineKeyboard);
-                    await client.SendAudioAsync(state.Id,new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileStream));
+                    await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
+                    await client.SendAudioAsync(state.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileStream), title: "Фудшеринг",performer: "Фудшеринг");
                 }
                 fileStream.Flush();
                 fileStream.Close();
             }
         }
     }
-
-
-   
 }

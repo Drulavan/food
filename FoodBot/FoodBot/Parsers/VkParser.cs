@@ -14,17 +14,18 @@ namespace FoodBot.Parsers
     /// <summary>
     /// Этот класс занимается парсингом стен и постов ВК
     /// </summary>
-    class VkParser
+    internal class VkParser
     {
-        VkApi api;
-        int[] groups;
+        private VkApi api;
+        private int[] groups;
+
         public VkParser(IConfiguration configuration)
         {
             api = new VkApi();
             api.Authorize(new ApiAuthParams
             {
                 ClientSecret = configuration["VkClientSecret"],
-                AccessToken= configuration["VkAccessToken"],
+                AccessToken = configuration["VkAccessToken"],
                 ResponseType = ResponseType.Token,
                 ApplicationId = UInt64.Parse(configuration["VkAppId"]),
             });
@@ -56,7 +57,7 @@ namespace FoodBot.Parsers
                         foreach (var atch in item.Attachments)
                         {
                             if (atch.Type.Name == "Photo")
-                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}")) ;
+                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}"));
                         }
 
                         result.Add(new Notice()
@@ -85,15 +86,13 @@ namespace FoodBot.Parsers
             Photo photo;
             try
             {
-                 photo = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
+                photo = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
             }
             catch (AlbumAccessDeniedException ex)
             {
                 return "";
             }
-                return photo.Sizes.OrderByDescending(x=>x.Height).FirstOrDefault().Url.OriginalString;
-         
-           
+            return photo.Sizes.OrderByDescending(x => x.Height).FirstOrDefault().Url.OriginalString;
         }
 
         private bool IsNew(VkNet.Model.Attachments.Post post)

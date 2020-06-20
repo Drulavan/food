@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace FoodBot.Parsers
 {
@@ -13,10 +12,16 @@ namespace FoodBot.Parsers
         /// Идентификатор
         /// </summary>
         public long Id { get; set; }
+
         /// <summary>
         /// Текст поста
         /// </summary>
         public string FullText { get; set; }
+
+        /// <summary>
+        /// Текст на картинке (если есть)
+        /// </summary>
+        public string ImageText { get; set; }
 
         /// <summary>
         /// Ссылка на пост

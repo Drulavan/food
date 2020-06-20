@@ -12,7 +12,7 @@
 
         public ConversationState ConversationState { get; set; }
         public long Id { get; set; }
-        
+
         public bool isRegistered { get; set; }
     }
 }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace FoodBot.Parsers
+﻿namespace FoodBot.Parsers
 {
     /// <summary>
     /// Класс метрик
@@ -13,8 +9,6 @@ namespace FoodBot.Parsers
 
         public string PostId { get; set; }
 
-       public Source Source { get; set; }
-
-
+        public Source Source { get; set; }
     }
 }
