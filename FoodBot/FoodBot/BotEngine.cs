@@ -10,12 +10,12 @@ namespace FoodBot
     internal class BotEngine
     {
         private readonly IEnumerable<IConversation> conversations;
-        private readonly List<UserState> userStates;
+        private List<UserState> userStates;
 
-        public BotEngine(IEnumerable<IConversation> conversations)
+        public BotEngine(IEnumerable<IConversation> conversations, List<UserState> states)
         {
             this.conversations = conversations;
-            userStates = new List<UserState>();
+            this.userStates = states;
         }
 
         internal void BotOnMessageReceived(object sender, MessageEventArgs e)
