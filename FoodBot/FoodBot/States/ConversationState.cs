@@ -4,13 +4,15 @@
     {
         None,
 
-        Registration,
+        Reg,
 
-        Sx,
+         SeX,
+
         Years,
 
         Allergy,    
-            END
+
+        END
        
 
     }
