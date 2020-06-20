@@ -1,5 +1,4 @@
 ﻿using FoodBot.States;
-using System.Threading.Tasks;
 using Telegram.Bot.Types;
 
 namespace FoodBot.Conversations
@@ -8,6 +7,6 @@ namespace FoodBot.Conversations
     {
         ConversationState ConversationState { get; }
 
-        UserState Execute(Message message,  UserState userState);
+        UserState Execute(Message message, UserState userState);
     }
 }
