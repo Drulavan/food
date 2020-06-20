@@ -6,12 +6,12 @@
 
         Registration,
 
-        Geo,
-        FIO,
         Sx,
         Years,
 
-        Allergy
+        Allergy,    
+            END
+       
 
     }
 }

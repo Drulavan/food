@@ -15,13 +15,13 @@ namespace FoodBot.Conversations
         {
         }
 
-        public ConversationState ConversationState => ConversationState.FIO;
+        public ConversationState ConversationState => ConversationState.None;
         public UserState Execute(Message message, UserState userState)
         {   NameUser=message.Text;
             if(NameUser!=null){
             Client.SendTextMessageAsync(message.Chat.Id, "Выберете Ваш пол:");
             
-            userState.ConversationState = ConversationState.Sx;
+            userState.ConversationState = ConversationState.None;
             }
             return userState;
         }

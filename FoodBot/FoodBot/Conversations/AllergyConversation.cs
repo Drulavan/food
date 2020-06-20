@@ -43,8 +43,8 @@ namespace FoodBot.Conversations
                    },   ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            //userState.ConversationState = ConversationState.Allergy;
-            Client.SendTextMessageAsync(message.Chat.Id, "На что у Вас аллергия?", replyMarkup: keyboard);
+            userState.ConversationState = ConversationState.END;
+            Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!", replyMarkup: keyboard);
             return userState;
         }
     }
