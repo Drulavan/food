@@ -55,7 +55,9 @@ namespace FoodBot.Parsers
                             FullText = item.Text,
                             Date = item.Date,
                             Source = Source.VK,
-                            Url = $"https://vk.com/wall{groupId}_{item.Id}"
+                            Url = $"https://vk.com/wall{groupId}_{item.Id}",
+                            PhotosUrl = new List<string>(),
+                            
                         });
                     }
                 }

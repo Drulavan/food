@@ -1,13 +1,8 @@
 ﻿using Amazon;
 using Amazon.Polly;
 using Amazon.Polly.Model;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
-using FoodBot.Conversations;
-using FoodBot.Helpers;
 using FoodBot.States;
 using Microsoft.Extensions.Configuration;
-using OpusDotNet;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -31,6 +26,7 @@ namespace FoodBot.Parsers.Jobs
             this.states = states;
             this.client = client;
             awspc = new AmazonPollyClient(configuration["AWSID"], configuration["AWSAccessKey"], RegionEndpoint.USEast2);
+
         }
 
         public async Task Execute()
@@ -56,11 +52,15 @@ namespace FoodBot.Parsers.Jobs
 
             using (var fileStream = File.Create(@$"\bot\{n.Id}.ogg"))
             {
+                using var defaultPhoto = File.OpenRead(".\\Resources\\boxes_food.png");
                 sres.AudioStream.CopyTo(fileStream);
                 fileStream.Seek(0, SeekOrigin.Begin);
                 foreach (var state in states)
                 {
-                    await client.SendTextMessageAsync(state.Id, $"{n.FullText}", replyMarkup: inlineKeyboard);
+
+                    var photo = n.PhotosUrl.Count > 0 ?
+                        new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
+                    await client.SendPhotoAsync(state.Id, photo, caption: $"{n.FullText}", replyMarkup: inlineKeyboard);
                     await client.SendAudioAsync(state.Id,new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileStream));
                 }
                 fileStream.Flush();

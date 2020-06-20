@@ -26,5 +26,7 @@ namespace FoodBot.Parsers
         public DateTime? Date { get; set; }
 
         public Source Source { get; set; }
+
+        public List<string> PhotosUrl { get; set; }
     }
 }
