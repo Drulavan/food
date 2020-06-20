@@ -5,7 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
+using VkNet.Exception;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 
 namespace FoodBot.Parsers
 {
@@ -47,11 +49,11 @@ namespace FoodBot.Parsers
                     if (IsNew(item))
                     {
                         List<string> photos = new List<string>();
-                        //foreach (var atch in item.Attachments)
-                        //{
-                        //    if (atch.Type.Name == "Photo")
-                        //        photos.Add(GetPhotoUrl(atch.Instance.ToString()));
-                        //}
+                        foreach (var atch in item.Attachments)
+                        {
+                            if (atch.Type.Name == "Photo")
+                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}")) ;
+                        }
 
                         result.Add(new Notice()
                         {
@@ -71,8 +73,18 @@ namespace FoodBot.Parsers
 
         private string GetPhotoUrl(string id)
         {
-            var p = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
-            return p.BigPhotoSrc.AbsoluteUri.ToString();
+            Photo photo;
+            try
+            {
+                 photo = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
+            }
+            catch (AlbumAccessDeniedException ex)
+            {
+                return "";
+            }
+                return photo.Sizes.OrderByDescending(x=>x.Height).FirstOrDefault().Url.OriginalString;
+         
+           
         }
 
         private bool IsNew(VkNet.Model.Attachments.Post post)
