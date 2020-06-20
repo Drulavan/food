@@ -3,6 +3,7 @@ using Amazon.Polly;
 using Amazon.Polly.Model;
 using FoodBot.States;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -35,13 +36,20 @@ namespace FoodBot.Parsers.Jobs
             var random = new Random();
             var notices = await parser.GetNotices();
             var n = notices.ToList()[random.Next(notices.Count())];
+
+            CtrMetric metric = new CtrMetric()
+            {
+                Source = n.Source,
+                PostId = n.Id.ToString(),
+            };
+            // Эта кнопка - наша метрика CTR. Предполагается что работать будет на редиректе типа http://metrics/post?param1=metric&param2=postUrl
             var inlineKeyboard = new InlineKeyboardMarkup(new InlineKeyboardButton()
             {
                 Text = "Ссылка на пост",
                 Url = n.Url
-            });
+            }); 
 
-           
+            // здесь идем в Amazon превратить текст в аудио
             SynthesizeSpeechRequest sreq = new SynthesizeSpeechRequest
             {
                 Text = $"{n.FullText}",

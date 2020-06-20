@@ -32,6 +32,10 @@ namespace FoodBot.Parsers
             groups = configuration.GetSection("VkGroups").Get<int[]>();
         }
 
+        /// <summary>
+        /// Загружаем посты из ВК
+        /// </summary>
+        /// <returns></returns>
         internal async Task<IEnumerable<Notice>> GetNotices()
         {
             var result = new List<Notice>();
@@ -71,6 +75,11 @@ namespace FoodBot.Parsers
             return result;
         }
 
+        /// <summary>
+        /// забираем прямую ссылку на фото
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         private string GetPhotoUrl(string id)
         {
             Photo photo;
