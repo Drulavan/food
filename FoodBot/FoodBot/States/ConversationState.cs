@@ -4,6 +4,14 @@
     {
         None,
 
-        Registration
+        Registration,
+
+        Geo,
+        FIO,
+        Sx,
+        Years,
+
+        Allergy
+
     }
 }
