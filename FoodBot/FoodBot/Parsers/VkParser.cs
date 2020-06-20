@@ -1,13 +1,19 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
+using VkNet.Exception;
 using VkNet.Model;
+using VkNet.Model.Attachments;
 
 namespace FoodBot.Parsers
 {
+    /// <summary>
+    /// Этот класс занимается парсингом стен и постов ВК
+    /// </summary>
     class VkParser
     {
         VkApi api;
@@ -42,12 +48,12 @@ namespace FoodBot.Parsers
                 {
                     if (IsNew(item))
                     {
-                        
-                        //foreach (var atch in item.Attachments)
-                        //{
-                        //    if (atch.Type.Name == "Photo")
-                        //        DownloadPhoto();
-                        //}
+                        List<string> photos = new List<string>();
+                        foreach (var atch in item.Attachments)
+                        {
+                            if (atch.Type.Name == "Photo")
+                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}")) ;
+                        }
 
                         result.Add(new Notice()
                         {
@@ -56,8 +62,7 @@ namespace FoodBot.Parsers
                             Date = item.Date,
                             Source = Source.VK,
                             Url = $"https://vk.com/wall{groupId}_{item.Id}",
-                            PhotosUrl = new List<string>(),
-                            
+                            PhotosUrl = photos,
                         });
                     }
                 }
@@ -66,9 +71,20 @@ namespace FoodBot.Parsers
             return result;
         }
 
-        private void DownloadPhoto()
+        private string GetPhotoUrl(string id)
         {
-            throw new NotImplementedException();
+            Photo photo;
+            try
+            {
+                 photo = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
+            }
+            catch (AlbumAccessDeniedException ex)
+            {
+                return "";
+            }
+                return photo.Sizes.OrderByDescending(x=>x.Height).FirstOrDefault().Url.OriginalString;
+         
+           
         }
 
         private bool IsNew(VkNet.Model.Attachments.Post post)

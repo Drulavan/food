@@ -13,7 +13,9 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FoodBot.Parsers.Jobs
 {
-
+    /// <summary>
+    /// Классы job реализуют паттерн стратегия позволяя по разному обрабатывать объявления из разных источников
+    /// </summary>
     public class ParseVkJob : IJob
     {
         VkParser parser;
@@ -26,7 +28,6 @@ namespace FoodBot.Parsers.Jobs
             this.states = states;
             this.client = client;
             awspc = new AmazonPollyClient(configuration["AWSID"], configuration["AWSAccessKey"], RegionEndpoint.USEast2);
-
         }
 
         public async Task Execute()
@@ -57,7 +58,6 @@ namespace FoodBot.Parsers.Jobs
                 fileStream.Seek(0, SeekOrigin.Begin);
                 foreach (var state in states)
                 {
-
                     var photo = n.PhotosUrl.Count > 0 ?
                         new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
                     await client.SendPhotoAsync(state.Id, photo, caption: $"{n.FullText}", replyMarkup: inlineKeyboard);
