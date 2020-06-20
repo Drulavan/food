@@ -17,7 +17,7 @@ namespace FoodBot.Conversations
         public ConversationState ConversationState => ConversationState.END;
         public UserState Execute(Message message, UserState userState)
         {   
-            userState.ConversationState = ConversationState.END;
+            //userState.ConversationState = ConversationState.END;
             Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
             return userState;
             

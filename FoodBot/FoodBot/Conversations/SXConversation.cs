@@ -14,7 +14,7 @@ namespace FoodBot.Conversations
         {
         }
 
-        public ConversationState ConversationState => ConversationState.Sx;
+        public ConversationState ConversationState => ConversationState.SeX;
         
         public UserState Execute(Message message, UserState userState)
         {
@@ -24,23 +24,24 @@ namespace FoodBot.Conversations
                                           
                                                   new[] //
                                                 {
-                                                              new KeyboardButton("Мужчина"),
-                                                                new KeyboardButton("Женщина")
+                                                    new KeyboardButton("Мужчина"),
+                                                    new KeyboardButton("Женщина")
                                                 },
             },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            if(message.Text=="Мужчина" || message.Text=="Женщина")
+
+            
+            Client.SendTextMessageAsync(message.Chat.Id, "Выберите свой пол:", replyMarkup: keyboard);
+          if(message.Text=="Мужчина" || message.Text=="Женщина")
             {
             userState.ConversationState = ConversationState.Years;
 
            
-            Client.SendTextMessageAsync(message.Chat.Id, "Выберите пожалуйста свой возраст:", replyMarkup: keyboard);
+           
             }
             return userState;
-            
         }
-        
     }
 }
