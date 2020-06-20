@@ -40,13 +40,14 @@ namespace FoodBot.Conversations
             Client.SendTextMessageAsync(message.Chat.Id, "Хотите зарегистрироваться?", replyMarkup: keyboard);
             if(message.Text=="Да")
             {
-            userState.ConversationState = ConversationState.FIO;       
+            
+            userState.ConversationState = ConversationState.Sx;       
             Client.SendTextMessageAsync(message.Chat.Id, "Введите Ваше имя", replyMarkup: keyboard);
             }
-           if(message.Text=="Нет")
+           if (message.Text=="Нет")
             {
                 Client.SendTextMessageAsync(message.Chat.Id, "Для персонализации Ваших запросов необходимо зарегистрироваться", replyMarkup: keyboard);
-                userState.ConversationState = ConversationState.Registration; 
+                userState.ConversationState = ConversationState.END; 
             }
             return userState;
         }

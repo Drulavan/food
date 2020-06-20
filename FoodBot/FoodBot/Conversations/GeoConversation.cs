@@ -14,7 +14,7 @@ namespace FoodBot.Conversations
         {
         }
 
-        public ConversationState ConversationState => ConversationState.Geo;
+        public ConversationState ConversationState => ConversationState.None;
         public UserState Execute(Message message, UserState userState)
         {
             if(message.Type == Telegram.Bot.Types.Enums.MessageType.Location)
