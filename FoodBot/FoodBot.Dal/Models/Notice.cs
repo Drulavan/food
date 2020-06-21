@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodBot.Parsers
+namespace FoodBot.Dal.Models
 {
     /// <summary>
     /// Это класс уведомления
@@ -36,11 +36,13 @@ namespace FoodBot.Parsers
         /// <summary>
         /// Источник объявления
         /// </summary>
-        public Source Source { get; set; }
+        public int Source { get; set; }
 
         /// <summary>
         /// Ссылки на фото
         /// </summary>
         public List<string> PhotosUrl { get; set; }
+
+        public bool IsShown { get; set; }
     }
 }

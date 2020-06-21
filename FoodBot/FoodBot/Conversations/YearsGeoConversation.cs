@@ -1,4 +1,4 @@
-using FoodBot.States;
+using FoodBot.Dal.Models;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;

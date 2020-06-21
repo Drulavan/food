@@ -1,4 +1,6 @@
-﻿namespace FoodBot.Parsers
+﻿using FoodBot.Dal.Models;
+
+namespace FoodBot.Parsers
 {
     /// <summary>
     /// Класс метрик
@@ -9,6 +11,6 @@
 
         public string PostId { get; set; }
 
-        public Source Source { get; set; }
+        public int Source { get; set; }
     }
 }

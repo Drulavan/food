@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using FoodBot.Dal.Models;
+using FoodBot.Dal.Repositories;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,13 +16,15 @@ namespace FoodBot.Parsers
     /// <summary>
     /// Этот класс занимается парсингом стен и постов ВК
     /// </summary>
-    internal class VkParser
+    public class VkParser
     {
         private VkApi api;
         private int[] groups;
+        NoticeRepository noticeRepository;
 
-        public VkParser(IConfiguration configuration)
+        public VkParser(IConfiguration configuration, NoticeRepository noticeRepository)
         {
+            this.noticeRepository = noticeRepository;
             api = new VkApi();
             api.Authorize(new ApiAuthParams
             {
@@ -65,7 +69,7 @@ namespace FoodBot.Parsers
                             Id = (long)item.Id,
                             FullText = item.Text,
                             Date = item.Date,
-                            Source = Source.VK,
+                            Source = 0,
                             Url = $"https://vk.com/wall{groupId}_{item.Id}",
                             PhotosUrl = photos,
                         });
@@ -97,7 +101,13 @@ namespace FoodBot.Parsers
 
         private bool IsNew(VkNet.Model.Attachments.Post post)
         {
-            return true;
+           // return true;
+            if (post.Id.HasValue)
+            {
+                return !noticeRepository.Exists(post.Id.Value);
+            }
+            return false;
+          
         }
     }
 }
