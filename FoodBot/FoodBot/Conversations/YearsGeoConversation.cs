@@ -44,7 +44,7 @@ namespace FoodBot.Conversations
                    },   ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст", replyMarkup: keyboard);
+            Client.SendTextMessageAsync(message.Chat.Id, "У Вас есть аллергия?", replyMarkup: keyboard);
             userState.ConversationState = ConversationState.Allergy;
            
           //  Client.SendTextMessageAsync(message.Chat.Id, "Есть у Вас аллергия на продукты?", replyMarkup: keyboard);
