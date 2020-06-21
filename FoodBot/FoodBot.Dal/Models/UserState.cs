@@ -11,6 +11,6 @@
         public long Id { get; set; }
        public float latitude { get; set; }
        public float longitude { get; set; }
-        public bool IsRegistered { get; internal set; }
+        public bool IsRegistered { get; set; }
     }
 }
