@@ -2,6 +2,7 @@
 using Amazon.Polly;
 using Amazon.Polly.Model;
 using FoodBot.Dal.Models;
+using FoodBot.Dal.Repositories;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,10 @@ namespace FoodBot.Parsers.Jobs
         private AmazonPollyClient awspc;
         private OCR ocr;
 
-        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states)
+        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states, NoticeRepository noticeRepository)
         {
-            parser = new VkParser(configuration);
+            VkParser parser = new VkParser(configuration, noticeRepository);
+            this.parser = parser;
             ocr = new OCR(configuration);
             this.states = states;
             this.client = client;

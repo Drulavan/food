@@ -30,7 +30,7 @@ namespace FoodBotAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            services.AddSingleton<NoticeRepository>();
+            services.AddTransient<NoticeRepository>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "P2P-FoodSharing API", Version = "v1", Description = "API для интеграции с GiveFood_Bot" });

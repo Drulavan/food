@@ -13,3 +13,4 @@
 /FoodBot/FoodBotAPI/bin/Debug/netcoreapp3.1
 /FoodBot/FoodBotAPI/obj
 /FoodBot/FoodBot.Dal/bin/Debug/netstandard2.0
+/FoodBot/FoodBotAPI/FoodBot.db

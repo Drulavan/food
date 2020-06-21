@@ -1,5 +1,7 @@
 ﻿using FoodBot.Conversations;
 using FoodBot.Dal.Models;
+using FoodBot.Dal.Repositories;
+using FoodBot.Parsers;
 using FoodBot.Parsers.Jobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +42,9 @@ namespace FoodBot
             collection.AddSingleton(new List<UserState>());
             collection.AddSingleton(configuration);
             collection.AddTransient<IJob, ParseVkJob>();
+            collection.AddTransient<StateRepository>();
+            collection.AddTransient<NoticeRepository>();
+            collection.AddTransient<VkParser>();
             var serviceProvider = collection.BuildServiceProvider();
 
             // on-start self-check

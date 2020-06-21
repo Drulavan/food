@@ -31,8 +31,32 @@ namespace FoodBot.Dal.Repositories
             using (var db = new LiteDatabase(DBNAME))
             {
                 var col = db.GetCollection<T>(tableName);
-                return results = col.FindAll();
+                return results = col.FindAll().ToList();
             }
+        }
+
+        public T Get(long id)
+        {
+
+            using (var db = new LiteDatabase(DBNAME))
+            {
+                var col = db.GetCollection<T>(tableName);
+                return col.FindById(id);
+            }
+
+
+        }
+
+        public bool IsExist(long id)
+        {
+
+            using (var db = new LiteDatabase(DBNAME))
+            {
+                var col = db.GetCollection<T>(tableName);
+                return col.Exists();
+            }
+
+
         }
     }
 }
