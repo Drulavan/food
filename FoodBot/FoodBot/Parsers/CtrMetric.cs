@@ -1,4 +1,6 @@
-﻿namespace FoodBot.Parsers
+﻿using FoodBot.Dal.Models;
+
+namespace FoodBot.Parsers
 {
     /// <summary>
     /// Класс метрик

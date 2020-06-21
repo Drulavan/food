@@ -9,3 +9,6 @@
 /FoodBot/FoodBot/appsettings.json
 /FoodBot/FoodBot/bin/x64/Debug/netcoreapp3.1
 /FoodBot/FoodBot/bin/Debug
+/FoodBot/FoodBot.Dal/obj
+/FoodBot/FoodBotAPI/bin/Debug/netcoreapp3.1
+/FoodBot/FoodBotAPI/obj

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FoodBot.Parsers
+namespace FoodBot.Dal.Models
 {
     /// <summary>
     /// Это класс уведомления

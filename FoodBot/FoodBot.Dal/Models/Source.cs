@@ -1,4 +1,4 @@
-﻿namespace FoodBot.Parsers
+﻿namespace FoodBot.Dal.Models
 {
     public enum Source
     {
