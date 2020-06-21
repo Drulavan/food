@@ -1,4 +1,4 @@
-﻿using FoodBot.States;
+﻿using FoodBot.Dal.Models;
 using Telegram.Bot.Types;
 
 namespace FoodBot.Conversations

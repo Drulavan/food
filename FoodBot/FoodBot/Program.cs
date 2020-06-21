@@ -1,6 +1,6 @@
 ﻿using FoodBot.Conversations;
+using FoodBot.Dal.Models;
 using FoodBot.Parsers.Jobs;
-using FoodBot.States;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;

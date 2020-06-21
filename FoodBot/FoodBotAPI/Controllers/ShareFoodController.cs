@@ -13,7 +13,6 @@ namespace FoodBotAPI.Controllers
     [Route("food")]
     public class ShareFoodController : ControllerBase
     {
-       
         private readonly ILogger<ShareFoodController> _logger;
         private readonly NoticeRepository _noticeRepository;
 
@@ -30,7 +29,15 @@ namespace FoodBotAPI.Controllers
         [HttpGet]
         public IEnumerable<Notice> Get(int n = 10)
         {
-            return _noticeRepository.GetAll().OrderByDescending(x => x.Date).Take(n).ToList();
+            try
+            {
+                return _noticeRepository.GetAll().OrderByDescending(x => x.Date).Take(n).ToList();
+            }
+            catch
+            {
+                return new List<Notice>();
+            }
+            
         }
 
         /// <summary>
@@ -38,9 +45,17 @@ namespace FoodBotAPI.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpPost]
-        public IEnumerable<string> Post()
+        public bool Post(Notice notice)
         {
-            return new List<string>();
+            try
+            {
+                 _noticeRepository.Add(notice);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }

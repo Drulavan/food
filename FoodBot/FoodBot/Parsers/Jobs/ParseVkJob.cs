@@ -1,7 +1,7 @@
 ﻿using Amazon;
 using Amazon.Polly;
 using Amazon.Polly.Model;
-using FoodBot.States;
+using FoodBot.Dal.Models;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;

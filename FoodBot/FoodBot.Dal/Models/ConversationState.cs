@@ -1,4 +1,4 @@
-﻿namespace FoodBot.States
+﻿namespace FoodBot.Dal.Models
 {
     /// <summary>
     /// Перечислитель состояний беседы
