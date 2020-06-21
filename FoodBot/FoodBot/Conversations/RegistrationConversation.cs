@@ -58,6 +58,7 @@ namespace FoodBot.Conversations
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };  
+            userState.IsRegistered=true;
              Client.SendTextMessageAsync(message.Chat.Id, "Выберите свой пол:", replyMarkup: keyboard);
             }
            if (message.Text=="Нет")
