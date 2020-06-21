@@ -17,7 +17,7 @@ namespace FoodBot.Conversations
         public ConversationState ConversationState => ConversationState.Allergy;
         public UserState Execute(Message message, UserState userState)
         {
-                   var keyboard = new ReplyKeyboardMarkup
+           /*        var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
                                           
@@ -43,8 +43,10 @@ namespace FoodBot.Conversations
                    },   ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
+            */
+            
+            Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
             userState.ConversationState = ConversationState.END;
-            Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!", replyMarkup: keyboard);
             return userState;
         }
     }

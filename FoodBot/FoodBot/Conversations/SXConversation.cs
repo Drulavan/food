@@ -18,7 +18,7 @@ namespace FoodBot.Conversations
         
         public UserState Execute(Message message, UserState userState)
         {
-                    var keyboard = new ReplyKeyboardMarkup
+         /*           var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
                                           
@@ -31,9 +31,35 @@ namespace FoodBot.Conversations
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
+*/ 
+                    var keyboard = new ReplyKeyboardMarkup
+            {
+                  Keyboard = new[] {
+                                          
+                                                  new[] //
+                                                {
+                                                                new KeyboardButton("до 25 лет"),
+                                                                new KeyboardButton("25-34лет")
+                                                               
+                                                                
+                                                },
+                                                new[]
+                                                {
 
+                                                                new KeyboardButton("35-44лет"),
+                                                                new KeyboardButton("45-54лет")     
+                                               },
+                                                new[]
+                                                 {
+                                                                new KeyboardButton("55-65лет"),
+                                                                new KeyboardButton("более 65 лет")
+                                                },
+                },
+                ResizeKeyboard = true,
+                OneTimeKeyboard = true
+            };
             
-            Client.SendTextMessageAsync(message.Chat.Id, "Выберите свой пол:", replyMarkup: keyboard);
+            Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст:", replyMarkup: keyboard);
           if(message.Text=="Мужчина" || message.Text=="Женщина")
             {
             userState.ConversationState = ConversationState.Years;

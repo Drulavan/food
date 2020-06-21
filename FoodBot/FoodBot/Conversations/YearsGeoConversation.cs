@@ -18,33 +18,33 @@ namespace FoodBot.Conversations
         public UserState Execute(Message message, UserState userState)
         {
             
-                    var keyboard = new ReplyKeyboardMarkup
+                  var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
                                           
                                                   new[] //
                                                 {
-                                                                new KeyboardButton("до 25 лет"),
-                                                                new KeyboardButton("25-34лет")
-                                                               
+                                                              new KeyboardButton("коровье молоко"),
+                                                              new KeyboardButton("куриное яйцо")
                                                                 
                                                 },
-                                                new[]
+                                                   new[] 
                                                 {
-
-                                                                new KeyboardButton("35-44лет"),
-                                                                new KeyboardButton("45-54лет")     
-                                               },
-                                                new[]
-                                                 {
-                                                                new KeyboardButton("55-65лет"),
-                                                                new KeyboardButton("более 65 лет")
+                                                             new KeyboardButton("Орехи и миндаль"),
+                                                            new KeyboardButton("Овощи и фрукты")
                                                 },
-                },
-                ResizeKeyboard = true,
+                                                     new[] 
+                                                {
+                                                             new KeyboardButton("Рыба"),
+                                                            new KeyboardButton("Специи"),
+                                                            new KeyboardButton("Цветение")
+                                                },
+            
+            
+                   },   ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            Client.SendTextMessageAsync(message.Chat.Id, "Введите Ваше имя", replyMarkup: keyboard);
+            Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст", replyMarkup: keyboard);
             userState.ConversationState = ConversationState.Allergy;
            
           //  Client.SendTextMessageAsync(message.Chat.Id, "Есть у Вас аллергия на продукты?", replyMarkup: keyboard);
