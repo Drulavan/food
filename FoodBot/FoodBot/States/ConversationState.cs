@@ -1,19 +1,19 @@
 ﻿namespace FoodBot.States
 {
-    /// <summary>
-    /// Перечислитель состояний беседы
-    /// </summary>
     public enum ConversationState
     {
         None,
 
-        Registration,
+        Reg,
 
-        Sx,
+        Oreg,
+         SeX,
+
         Years,
 
         Allergy,    
-            END
+
+        END
        
 
     }

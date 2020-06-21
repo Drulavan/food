@@ -1,4 +1,6 @@
-﻿using FoodBot.States;
+﻿using System.Reflection.Emit;
+using FoodBot.States;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -15,6 +17,7 @@ namespace FoodBot.Conversations
 
         public UserState Execute(Message message, UserState userState)
         {
+            
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
@@ -23,9 +26,12 @@ namespace FoodBot.Conversations
                                                                new KeyboardButton("Геолокация")
                                                                {
                                                                    RequestLocation = true
+                                                                   
                                                                }
                                                                
                                                 },
+                                                
+                                                
                                                
                                                 
           },
@@ -34,10 +40,11 @@ namespace FoodBot.Conversations
             };
           
            Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
-        
-                       
-                         userState.ConversationState = ConversationState.Registration;
-                        
+            
+                                    userState.ConversationState = ConversationState.Oreg;
+
+                                    
+                                               
             return userState;
         }
         

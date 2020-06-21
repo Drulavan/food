@@ -14,33 +14,60 @@ namespace FoodBot.Conversations
         {
         }
 
-        public ConversationState ConversationState => ConversationState.Sx;
+        public ConversationState ConversationState => ConversationState.SeX;
         
         public UserState Execute(Message message, UserState userState)
         {
-                    var keyboard = new ReplyKeyboardMarkup
+         /*           var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
                                           
                                                   new[] //
                                                 {
-                                                              new KeyboardButton("Мужчина"),
-                                                                new KeyboardButton("Женщина")
+                                                    new KeyboardButton("Мужчина"),
+                                                    new KeyboardButton("Женщина")
                                                 },
             },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-            if(message.Text=="Мужчина" || message.Text=="Женщина")
+*/ 
+                    var keyboard = new ReplyKeyboardMarkup
+            {
+                  Keyboard = new[] {
+                                          
+                                                  new[] //
+                                                {
+                                                                new KeyboardButton("до 25 лет"),
+                                                                new KeyboardButton("25-34лет")
+                                                               
+                                                                
+                                                },
+                                                new[]
+                                                {
+
+                                                                new KeyboardButton("35-44лет"),
+                                                                new KeyboardButton("45-54лет")     
+                                               },
+                                                new[]
+                                                 {
+                                                                new KeyboardButton("55-65лет"),
+                                                                new KeyboardButton("более 65 лет")
+                                                },
+                },
+                ResizeKeyboard = true,
+                OneTimeKeyboard = true
+            };
+            
+            Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст:", replyMarkup: keyboard);
+          if(message.Text=="Мужчина" || message.Text=="Женщина")
             {
             userState.ConversationState = ConversationState.Years;
 
            
-            Client.SendTextMessageAsync(message.Chat.Id, "Выберите пожалуйста свой возраст:", replyMarkup: keyboard);
+           
             }
             return userState;
-            
         }
-        
     }
 }
