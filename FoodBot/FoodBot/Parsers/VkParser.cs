@@ -69,7 +69,7 @@ namespace FoodBot.Parsers
                             Id = (long)item.Id,
                             FullText = item.Text,
                             Date = item.Date,
-                            Source = Source.VK,
+                            Source = 0,
                             Url = $"https://vk.com/wall{groupId}_{item.Id}",
                             PhotosUrl = photos,
                         });
@@ -101,10 +101,10 @@ namespace FoodBot.Parsers
 
         private bool IsNew(VkNet.Model.Attachments.Post post)
         {
-            return true;
+           // return true;
             if (post.Id.HasValue)
             {
-                return noticeRepository.Get(post.Id.Value)==null;
+                return !noticeRepository.Exists(post.Id.Value);
             }
             return false;
           

@@ -39,11 +39,13 @@ namespace FoodBot
             }
             var client = new TelegramBotClient(configuration["BotKey"]);
             collection.AddSingleton(client);
+            collection.AddSingleton<ITextToSpeech,AwsTextToSpeech>();
             collection.AddSingleton(new List<UserState>());
             collection.AddSingleton(configuration);
             collection.AddTransient<IJob, ParseVkJob>();
+            collection.AddTransient<IJob, DbCheck>();
             collection.AddTransient<StateRepository>();
-            collection.AddTransient<NoticeRepository>();
+            collection.AddSingleton<NoticeRepository>();
             collection.AddTransient<VkParser>();
             var serviceProvider = collection.BuildServiceProvider();
 

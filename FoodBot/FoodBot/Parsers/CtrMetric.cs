@@ -11,6 +11,6 @@ namespace FoodBot.Parsers
 
         public string PostId { get; set; }
 
-        public Source Source { get; set; }
+        public int Source { get; set; }
     }
 }

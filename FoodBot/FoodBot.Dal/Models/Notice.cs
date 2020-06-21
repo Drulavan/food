@@ -36,11 +36,13 @@ namespace FoodBot.Dal.Models
         /// <summary>
         /// Источник объявления
         /// </summary>
-        public Source Source { get; set; }
+        public int Source { get; set; }
 
         /// <summary>
         /// Ссылки на фото
         /// </summary>
         public List<string> PhotosUrl { get; set; }
+
+        public bool IsShown { get; set; }
     }
 }

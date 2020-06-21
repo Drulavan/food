@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace FoodBot.Dal.Repositories
 {
     public abstract class BaseRepository<T>
     {
-        const string DBNAME = "FoodBot.db";
+        protected const string DBNAME = @"Filename=\bot\FoodBot.db; Connection=shared";
         private readonly string tableName;
 
         protected BaseRepository(string tableName)
@@ -25,6 +26,15 @@ namespace FoodBot.Dal.Repositories
             }
         }
 
+        public void Update(T entity)
+        {
+            using (var db = new LiteDatabase(DBNAME))
+            {
+                var col = db.GetCollection<T>(tableName);
+                col.Update(entity);
+            }
+        }
+
         public IEnumerable<T> GetAll()
         {
             IEnumerable<T> results;
@@ -35,28 +45,7 @@ namespace FoodBot.Dal.Repositories
             }
         }
 
-        public T Get(long id)
-        {
+     
 
-            using (var db = new LiteDatabase(DBNAME))
-            {
-                var col = db.GetCollection<T>(tableName);
-                return col.FindById(id);
-            }
-
-
-        }
-
-        public bool IsExist(long id)
-        {
-
-            using (var db = new LiteDatabase(DBNAME))
-            {
-                var col = db.GetCollection<T>(tableName);
-                return col.Exists();
-            }
-
-
-        }
     }
 }
