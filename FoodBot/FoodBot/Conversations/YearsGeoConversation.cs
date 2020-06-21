@@ -24,8 +24,8 @@ namespace FoodBot.Conversations
                                           
                                                   new[] //
                                                 {
-                                                              new KeyboardButton("коровье молоко"),
-                                                              new KeyboardButton("куриное яйцо")
+                                                              new KeyboardButton("Коровье молоко"),
+                                                              new KeyboardButton("Куриное яйцо")
                                                                 
                                                 },
                                                    new[] 
