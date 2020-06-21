@@ -38,12 +38,17 @@ namespace FoodBot.Conversations
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-          
+           if( userState.IsRegistered==true)
+                                    {
+                                          Client.SendTextMessageAsync(message.Chat.Id, $"Вы зарегистрированы");
+                                    }
+                                    else
+                                    {
            Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
             
                                     userState.ConversationState = ConversationState.Oreg;
-
-                                    
+                                    }
+                                  
                                                
             return userState;
         }
