@@ -1,12 +1,20 @@
 ﻿namespace FoodBot.Dal.Models
 {
-    /// <summary>
-    /// Перечислитель состояний беседы
-    /// </summary>
     public enum ConversationState
     {
         None,
 
-        Registration
+        Reg,
+
+        Oreg,
+         SeX,
+
+        Years,
+
+        Allergy,    
+
+        END
+       
+
     }
 }
