@@ -17,7 +17,7 @@ namespace FoodBot
 {
     internal class Program
     {
-        private static async Task Main(string[] args)
+        private static void Main(string[] args)
         {
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
@@ -39,11 +39,9 @@ namespace FoodBot
             }
             var client = new TelegramBotClient(configuration["BotKey"]);
             collection.AddSingleton(client);
-            collection.AddSingleton<ITextToSpeech,AwsTextToSpeech>();
             collection.AddSingleton(new List<UserState>());
             collection.AddSingleton(configuration);
             collection.AddTransient<IJob, ParseVkJob>();
-            collection.AddTransient<IJob, DbCheck>();
             collection.AddTransient<StateRepository>();
             collection.AddSingleton<NoticeRepository>();
             collection.AddTransient<VkParser>();
@@ -72,7 +70,7 @@ namespace FoodBot
                    {
                        j.Execute();
                    };
-                   Thread.Sleep(10000);
+                   Thread.Sleep(30000);
                }
            });
             workerThread.Start();

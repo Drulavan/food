@@ -7,7 +7,7 @@ namespace FoodBot.Dal.Repositories
 {
     public class StateRepository : BaseRepository<UserState>
     {
-        public StateRepository(string tableName) : base("States")
+        public StateRepository() : base("States")
         {
         }
     }

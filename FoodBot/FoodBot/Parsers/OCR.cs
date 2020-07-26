@@ -9,7 +9,7 @@ namespace FoodBot.Parsers
 {
     public class OCR
     {
-        private string apiKey;
+        private readonly string apiKey;
 
         public OCR(IConfiguration configuration)
         {
@@ -21,13 +21,17 @@ namespace FoodBot.Parsers
             string text = "";
             try
             {
-                HttpClient httpClient = new HttpClient();
-                httpClient.Timeout = new TimeSpan(1, 1, 1);
+                HttpClient httpClient = new HttpClient
+                {
+                    Timeout = new TimeSpan(1, 1, 1)
+                };
 
-                MultipartFormDataContent form = new MultipartFormDataContent();
-                form.Add(new StringContent(apiKey), "apikey"); //Added api key in form data
-                form.Add(new StringContent("rus"), "language");
-                form.Add(new StringContent(ImageUrl), "url");
+                MultipartFormDataContent form = new MultipartFormDataContent
+                {
+                    { new StringContent(apiKey), "apikey" }, //Added api key in form data
+                    { new StringContent("rus"), "language" },
+                    { new StringContent(ImageUrl), "url" }
+                };
 
                 HttpResponseMessage response = await httpClient.PostAsync("https://api.ocr.space/Parse/Image", form);
 
@@ -38,7 +42,7 @@ namespace FoodBot.Parsers
                 {
                     for (int i = 0; i < ocrResult.ParsedResults.Count(); i++)
                     {
-                        text = text + ocrResult.ParsedResults[i].ParsedText;
+                        text += ocrResult.ParsedResults[i].ParsedText;
                     }
                 }
                 else
@@ -46,7 +50,7 @@ namespace FoodBot.Parsers
                     return string.Empty;
                 }
             }
-            catch (Exception exception)
+            catch
             {
                 return string.Empty;
             }

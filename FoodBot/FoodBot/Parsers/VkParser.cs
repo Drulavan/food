@@ -18,9 +18,9 @@ namespace FoodBot.Parsers
     /// </summary>
     public class VkParser
     {
-        private VkApi api;
-        private int[] groups;
-        NoticeRepository noticeRepository;
+        private readonly VkApi api;
+        private readonly int[] groups;
+        private readonly NoticeRepository noticeRepository;
 
         public VkParser(IConfiguration configuration, NoticeRepository noticeRepository)
         {
@@ -92,7 +92,7 @@ namespace FoodBot.Parsers
             {
                 photo = api.Photo.GetById(new List<string> { id }).FirstOrDefault();
             }
-            catch (AlbumAccessDeniedException ex)
+            catch
             {
                 return "";
             }
@@ -101,13 +101,12 @@ namespace FoodBot.Parsers
 
         private bool IsNew(VkNet.Model.Attachments.Post post)
         {
-           // return true;
+            // return true;
             if (post.Id.HasValue)
             {
                 return !noticeRepository.Exists(post.Id.Value);
             }
             return false;
-          
         }
     }
 }

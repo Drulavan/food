@@ -1,16 +1,11 @@
-﻿using Amazon;
-using Amazon.Polly;
-using Amazon.Polly.Model;
-using FoodBot.Dal.Models;
+﻿using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace FoodBot.Parsers.Jobs
 {
@@ -19,17 +14,16 @@ namespace FoodBot.Parsers.Jobs
     /// </summary>
     public class ParseVkJob : BaseJob, IJob
     {
-        private VkParser parser;
-     
-        NoticeRepository noticeRepository;
+        private readonly VkParser parser;
 
-        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states, NoticeRepository noticeRepository, ITextToSpeech textToSpeech) 
-            : base(configuration,client,states,textToSpeech)
+        private readonly NoticeRepository noticeRepository;
+
+        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states, NoticeRepository noticeRepository)
+            : base(configuration, client, states)
         {
             VkParser parser = new VkParser(configuration, noticeRepository);
             this.noticeRepository = noticeRepository;
             this.parser = parser;
-          
         }
 
         public async Task Execute()
@@ -41,7 +35,7 @@ namespace FoodBot.Parsers.Jobs
             var n = notices.ToList()[random.Next(notices.Count())];
             n.IsShown = true;
             noticeRepository.Add(n);
-            await  SendNoticeAsync(n);
+            await SendNoticeAsync(n);
         }
     }
 }

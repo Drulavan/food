@@ -1,7 +1,7 @@
-﻿using Telegram.Bot;
+﻿using FoodBot.Dal.Models;
+using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using FoodBot.Dal.Models;
 
 namespace FoodBot.Conversations
 {
@@ -15,7 +15,6 @@ namespace FoodBot.Conversations
 
         public UserState Execute(Message message, UserState userState)
         {
-            
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
@@ -24,34 +23,24 @@ namespace FoodBot.Conversations
                                                                new KeyboardButton("Геолокация")
                                                                {
                                                                    RequestLocation = true
-                                                                   
                                                                }
-                                                               
                                                 },
-                                                
-                                                
-                                               
-                                                
           },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-           if( userState.IsRegistered==true)
-                                    {
-                                          Client.SendTextMessageAsync(message.Chat.Id, $"Вы зарегистрированы");
-                                    }
-                                    else
-                                    {
-           Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
-            
-                                    userState.ConversationState = ConversationState.Oreg;
-                                    }
-                                  
-                                               
+            if (userState.IsRegistered == true)
+            {
+                Client.SendTextMessageAsync(message.Chat.Id, $"Вы зарегистрированы");
+            }
+            else
+            {
+                Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
+
+                userState.ConversationState = ConversationState.Oreg;
+            }
+
             return userState;
         }
-        
     }
-    
-
 }
