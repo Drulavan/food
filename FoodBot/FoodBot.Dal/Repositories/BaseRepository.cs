@@ -45,7 +45,14 @@ namespace FoodBot.Dal.Repositories
             }
         }
 
-     
+        public T Get(long id)
+        {
+            using (var db = new LiteDatabase(DBNAME))
+            {
+                var col = db.GetCollection<T>(tableName);
+                return col.FindById(id);
+            }
+        }
 
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FoodBot.Dal.Models;
+using FoodBot.Dal.Repositories;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -11,14 +12,13 @@ namespace FoodBot.Parsers.Jobs
     public abstract class BaseJob
     {
         private readonly TelegramBotClient client;
-        private readonly List<UserState> states;
-
+        private readonly StateRepository stateRepository;
         private readonly OCR ocr;
 
-        public BaseJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states)
+        public BaseJob(IConfiguration configuration, TelegramBotClient client, StateRepository stateRepository)
         {
             ocr = new OCR(configuration);
-            this.states = states;
+            this.stateRepository = stateRepository;
             this.client = client;
         }
 
@@ -30,29 +30,25 @@ namespace FoodBot.Parsers.Jobs
                 Text = "Ссылка на пост",
                 Url = n.Url
             });
+
             string imageText = string.Empty;
-            // здесь запрашиваем текст с картинки
-            if (n.PhotosUrl.Count > 0)
+
+            // здесь запрашиваем текст с картинки если нужен
+            if (n.PhotosUrl.Count > 0 && string.IsNullOrEmpty(n.FullText))
             {
                 imageText = await ocr.GetImageTextAsync(n.PhotosUrl[0]);
             }
 
             string caption = !String.IsNullOrEmpty(n.FullText) ? $"{n.FullText}" : $"{imageText}";
-            // здесь идем в Amazon превратить текст в аудио
 
-            using var fileStream = File.Create(@$"\bot\{n.Id}.ogg");
             using var defaultPhoto = File.OpenRead(".\\Resources\\boxes_food.png");
 
-            foreach (var state in states)
+            foreach (var state in stateRepository.GetAll())
             {
-                fileStream.Seek(0, SeekOrigin.Begin);
                 var photo = n.PhotosUrl.Count > 0 ?
                     new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
                 await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
-                await client.SendAudioAsync(state.Id, new Telegram.Bot.Types.InputFiles.InputOnlineFile(fileStream), title: "Фудшеринг", performer: "Фудшеринг");
             }
-            fileStream.Flush();
-            fileStream.Close();
         }
     }
 }

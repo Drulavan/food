@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
-using System.Threading.Tasks;
 using Telegram.Bot;
 
 namespace FoodBot
@@ -26,7 +25,6 @@ namespace FoodBot
             //собираем беседы в контейнер
             var collection = new ServiceCollection();
             Assembly ConsoleAppAssembly = typeof(Program).Assembly;
-
             var ConsoleAppTypes =
                 from type in ConsoleAppAssembly.GetTypes()
                 where !type.IsAbstract
@@ -37,13 +35,14 @@ namespace FoodBot
             {
                 collection.AddTransient(typeof(IConversation), type);
             }
+
             var client = new TelegramBotClient(configuration["BotKey"]);
+            collection.AddSingleton<BotEngine>();
             collection.AddSingleton(client);
-            collection.AddSingleton(new List<UserState>());
             collection.AddSingleton(configuration);
             collection.AddTransient<IJob, ParseVkJob>();
             collection.AddTransient<StateRepository>();
-            collection.AddSingleton<NoticeRepository>();
+            collection.AddTransient<NoticeRepository>();
             collection.AddTransient<VkParser>();
             var serviceProvider = collection.BuildServiceProvider();
 
@@ -54,7 +53,7 @@ namespace FoodBot
             );
 
             // регистрируем движок и вешаем события
-            BotEngine engine = new BotEngine(serviceProvider.GetServices<IConversation>(), serviceProvider.GetService<List<UserState>>());
+            BotEngine engine = serviceProvider.GetService<BotEngine>();
             client.OnMessage += engine.BotOnMessageReceived;
             client.OnReceiveError += engine.BotOnReceiveError;
             client.OnInlineQuery += engine.BotOnInlineQuery;
@@ -62,7 +61,7 @@ namespace FoodBot
 
             // endless background job
             Thread workerThread = new Thread(() =>
-           {
+            {
                while (true)
                {
                    var jobs = serviceProvider.GetServices<IJob>().ToList();
@@ -72,7 +71,7 @@ namespace FoodBot
                    };
                    Thread.Sleep(30000);
                }
-           });
+            });
             workerThread.Start();
 
             client.StartReceiving();

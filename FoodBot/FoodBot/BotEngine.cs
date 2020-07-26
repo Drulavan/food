@@ -1,5 +1,6 @@
 ﻿using FoodBot.Conversations;
 using FoodBot.Dal.Models;
+using FoodBot.Dal.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace FoodBot
     internal class BotEngine
     {
         private readonly IEnumerable<IConversation> conversations;
-        private List<UserState> userStates;
+        private readonly StateRepository stateRepository;
 
-        public BotEngine(IEnumerable<IConversation> conversations, List<UserState> states)
+        public BotEngine(IEnumerable<IConversation> conversations, StateRepository stateRepository)
         {
             this.conversations = conversations;
-            this.userStates = states;
+            this.stateRepository = stateRepository;
         }
 
         internal void BotOnMessageReceived(object sender, MessageEventArgs e)
@@ -28,16 +29,16 @@ namespace FoodBot
 
         private void SaveState(UserState user)
         {
-            userStates.Remove(GetState(user.Id));
-            userStates.Add(user);
+            stateRepository.Update(user);
         }
 
         private UserState GetState(long id)
         {
-            var user = userStates.Where(x => x.Id == id).FirstOrDefault();
+            var user = stateRepository.Get(id);
             if (user == null)
             {
                 user = new UserState(id);
+                stateRepository.Add(user);
             }
             return user;
         }

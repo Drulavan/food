@@ -53,7 +53,7 @@ namespace FoodBot.Parsers
                 };
 
                 var wallGetObjects = await api.Wall.GetAsync(getParams);
-                foreach (VkNet.Model.Attachments.Post item in wallGetObjects.WallPosts)
+                foreach (Post item in wallGetObjects.WallPosts)
                 {
                     if (IsNew(item))
                     {
@@ -99,7 +99,7 @@ namespace FoodBot.Parsers
             return photo.Sizes.OrderByDescending(x => x.Height).FirstOrDefault().Url.OriginalString;
         }
 
-        private bool IsNew(VkNet.Model.Attachments.Post post)
+        private bool IsNew(Post post)
         {
             // return true;
             if (post.Id.HasValue)

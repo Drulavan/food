@@ -18,12 +18,11 @@ namespace FoodBot.Parsers.Jobs
 
         private readonly NoticeRepository noticeRepository;
 
-        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, List<UserState> states, NoticeRepository noticeRepository)
-            : base(configuration, client, states)
+        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, StateRepository stateRepository, NoticeRepository noticeRepository, VkParser parser)
+            : base(configuration, client, stateRepository)
         {
-            VkParser parser = new VkParser(configuration, noticeRepository);
-            this.noticeRepository = noticeRepository;
             this.parser = parser;
+            this.noticeRepository = noticeRepository;
         }
 
         public async Task Execute()
@@ -32,9 +31,12 @@ namespace FoodBot.Parsers.Jobs
             /// в продакшн пойдет алгоритм исключающий аллергии и радиус через подсчет long/lat
             var random = new Random();
             var notices = await parser.GetNotices();
+
             var n = notices.ToList()[random.Next(notices.Count())];
             n.IsShown = true;
             noticeRepository.Add(n);
+
+            // отправляем сообщение
             await SendNoticeAsync(n);
         }
     }
