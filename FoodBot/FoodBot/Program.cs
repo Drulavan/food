@@ -69,7 +69,7 @@ namespace FoodBot
                    {
                        j.Execute();
                    };
-                   Thread.Sleep(30000);
+                   Thread.Sleep(int.Parse(configuration["JobSleepTimer"]));
                }
             });
             workerThread.Start();

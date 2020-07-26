@@ -31,7 +31,7 @@ namespace FoodBot.Parsers
                 ClientSecret = configuration["VkClientSecret"],
                 AccessToken = configuration["VkAccessToken"],
                 ResponseType = ResponseType.Token,
-                ApplicationId = UInt64.Parse(configuration["VkAppId"]),
+                ApplicationId = ulong.Parse(configuration["VkAppId"]),
             });
 
             groups = configuration.GetSection("VkGroups").Get<int[]>();
