@@ -9,7 +9,7 @@ namespace FoodBot.Dal.Repositories
 {
     public abstract class BaseRepository<T>
     {
-        protected const string DBNAME = @"Filename=\bot\FoodBot.db; Connection=shared";
+        protected const string DBNAME = @"Filename=.\FoodBot.db; Connection=shared";
         private readonly string tableName;
 
         protected BaseRepository(string tableName)

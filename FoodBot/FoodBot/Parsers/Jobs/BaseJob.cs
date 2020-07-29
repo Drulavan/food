@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
 
@@ -13,16 +15,14 @@ namespace FoodBot.Parsers.Jobs
     {
         private readonly TelegramBotClient client;
         private readonly StateRepository stateRepository;
-        private readonly OCR ocr;
-
-        public BaseJob(IConfiguration configuration, TelegramBotClient client, StateRepository stateRepository)
+      
+        public BaseJob(TelegramBotClient client, StateRepository stateRepository)
         {
-            ocr = new OCR(configuration);
             this.stateRepository = stateRepository;
             this.client = client;
         }
 
-        public virtual async System.Threading.Tasks.Task SendNoticeAsync(Notice n)
+        public virtual async Task SendNoticeAsync(Notice n)
         {
             // Эта кнопка - наша метрика CTR. Предполагается что работать будет на редиректе типа http://metrics/post?param1=metric&param2=postUrl
             var inlineKeyboard = new InlineKeyboardMarkup(new InlineKeyboardButton()
@@ -31,23 +31,15 @@ namespace FoodBot.Parsers.Jobs
                 Url = n.Url
             });
 
-            string imageText = string.Empty;
-
-            // здесь запрашиваем текст с картинки если нужен
-            if (n.PhotosUrl.Count > 0 && string.IsNullOrEmpty(n.FullText))
-            {
-                imageText = await ocr.GetImageTextAsync(n.PhotosUrl[0]);
-            }
-
-            string caption = !String.IsNullOrEmpty(n.FullText) ? $"{n.FullText}" : $"{imageText}";
+            string caption =  $"{n.FullText}" ;
 
             using var defaultPhoto = File.OpenRead(".\\Resources\\boxes_food.png");
+            var photo = n.PhotosUrl.Where(x => !string.IsNullOrEmpty(x)).ToList().Count > 0 ?
+                   new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
 
             foreach (var state in stateRepository.GetAll())
             {
-                var photo = n.PhotosUrl.Count > 0 ?
-                    new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
-                await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
+                 await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
             }
         }
     }
