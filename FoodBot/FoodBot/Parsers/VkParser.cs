@@ -49,7 +49,8 @@ namespace FoodBot.Parsers
             {
                 VkNet.Model.RequestParams.WallGetParams getParams = new VkNet.Model.RequestParams.WallGetParams()
                 {
-                    OwnerId = groupId
+                    OwnerId = groupId,
+                    Count = 10,
                 };
 
                 var wallGetObjects = await api.Wall.GetAsync(getParams);

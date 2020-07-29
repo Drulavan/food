@@ -19,11 +19,6 @@ namespace FoodBot.Dal.Models
         public string FullText { get; set; }
 
         /// <summary>
-        /// Текст на картинке (если есть)
-        /// </summary>
-        public string ImageText { get; set; }
-
-        /// <summary>
         /// Ссылка на пост
         /// </summary>
         public string Url { get; set; }

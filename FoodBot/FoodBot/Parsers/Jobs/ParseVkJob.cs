@@ -18,8 +18,8 @@ namespace FoodBot.Parsers.Jobs
 
         private readonly NoticeRepository noticeRepository;
 
-        public ParseVkJob(IConfiguration configuration, TelegramBotClient client, StateRepository stateRepository, NoticeRepository noticeRepository, VkParser parser)
-            : base(configuration, client, stateRepository)
+        public ParseVkJob( TelegramBotClient client, StateRepository stateRepository, NoticeRepository noticeRepository, VkParser parser)
+            : base(client, stateRepository)
         {
             this.parser = parser;
             this.noticeRepository = noticeRepository;
@@ -27,17 +27,21 @@ namespace FoodBot.Parsers.Jobs
 
         public async Task Execute()
         {
-            /// настроено рандомно для презентации
-            /// в продакшн пойдет алгоритм исключающий аллергии и радиус через подсчет long/lat
-            var random = new Random();
             var notices = await parser.GetNotices();
 
-            var n = notices.ToList()[random.Next(notices.Count())];
-            n.IsShown = true;
-            noticeRepository.Add(n);
+            //берем самую старую запись, но не старше суток
+            var n = notices.Where(x=>x.Date>DateTime.Now.AddDays(-1))
+                .OrderBy(x=>x.Date)
+                .FirstOrDefault();
 
-            // отправляем сообщение
-            await SendNoticeAsync(n);
+            if (n != null)
+            {
+                n.IsShown = true;
+                noticeRepository.Add(n);
+
+                // отправляем сообщение
+                await SendNoticeAsync(n);
+            }
         }
     }
 }
