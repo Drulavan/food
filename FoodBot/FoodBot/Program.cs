@@ -1,4 +1,5 @@
-﻿using FoodBot.Conversations;
+﻿using Cyriller;
+using FoodBot.Conversations;
 using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
 using FoodBot.Parsers;
@@ -20,6 +21,7 @@ namespace FoodBot
         {
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
+               .AddJsonFile("food.json", true, true)
                .Build();
 
             //собираем беседы в контейнер
@@ -35,6 +37,20 @@ namespace FoodBot
             {
                 collection.AddTransient(typeof(IConversation), type);
             }
+            var cyrPhrase = new CyrPhrase(new CyrNounCollection(), new CyrAdjectiveCollection());
+            var foodDictionary = new Dictionary<Categories, List<string>>();
+            foreach (var cat in foodDictionary.Keys)
+            {
+                foreach (var list in foodDictionary.Values)
+                {
+                    foreach (var food in list)
+                    {
+                        list.AddRange(cyrPhrase.Decline(food, Cyriller.Model.GetConditionsEnum.Similar).ToList());
+                    }
+                }
+            }
+
+            cyrPhrase = null;
 
             var client = new TelegramBotClient(configuration["BotKey"]);
             collection.AddSingleton<BotEngine>();
@@ -44,6 +60,8 @@ namespace FoodBot
             collection.AddTransient<StateRepository>();
             collection.AddTransient<NoticeRepository>();
             collection.AddTransient<VkParser>();
+            collection.AddSingleton(foodDictionary);
+            collection.AddTransient<Categorizer>();
             var serviceProvider = collection.BuildServiceProvider();
 
             // on-start self-check
@@ -62,15 +80,15 @@ namespace FoodBot
             // endless background job
             Thread workerThread = new Thread(() =>
             {
-               while (true)
-               {
-                   var jobs = serviceProvider.GetServices<IJob>().ToList();
-                   foreach (IJob j in jobs)
-                   {
-                       j.Execute();
-                   };
-                   Thread.Sleep(int.Parse(configuration["JobSleepTimer"]));
-               }
+                while (true)
+                {
+                    var jobs = serviceProvider.GetServices<IJob>().ToList();
+                    foreach (IJob j in jobs)
+                    {
+                        j.Execute();
+                    };
+                    Thread.Sleep(int.Parse(configuration["JobSleepTimer"]));
+                }
             });
             workerThread.Start();
 
