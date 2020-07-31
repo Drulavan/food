@@ -24,6 +24,8 @@ namespace FoodBot
                .AddJsonFile("food.json", true, true)
                .Build();
 
+           
+
             //собираем беседы в контейнер
             var collection = new ServiceCollection();
             Assembly ConsoleAppAssembly = typeof(Program).Assembly;
@@ -37,17 +39,22 @@ namespace FoodBot
             {
                 collection.AddTransient(typeof(IConversation), type);
             }
+
+            var conf = new Dictionary<Categories, List<string>>();
+            configuration.GetSection("Categories").Bind(conf);
             var cyrPhrase = new CyrPhrase(new CyrNounCollection(), new CyrAdjectiveCollection());
             var foodDictionary = new Dictionary<Categories, List<string>>();
-            foreach (var cat in foodDictionary.Keys)
+            foreach (var cat in conf.Keys)
             {
-                foreach (var list in foodDictionary.Values)
+                var l = new List<string>();
+                foreach (var list in conf.Values)
                 {
                     foreach (var food in list)
                     {
-                        list.AddRange(cyrPhrase.Decline(food, Cyriller.Model.GetConditionsEnum.Similar).ToList());
+                        l.AddRange(cyrPhrase.Decline(food, Cyriller.Model.GetConditionsEnum.Similar).ToList());
                     }
                 }
+                foodDictionary.Add(cat, l);
             }
 
             cyrPhrase = null;

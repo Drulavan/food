@@ -1,5 +1,4 @@
-﻿using Cyriller;
-using FoodBot.Dal.Models;
+﻿using FoodBot.Dal.Models;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +25,7 @@ namespace FoodBot.Parsers
         {
             var punctuation = message.Where(char.IsPunctuation).Distinct().ToArray();
             return message.Split()
-                .Select(x => x.Trim(punctuation))
+                .Select(x => x.Trim(punctuation).ToLower())
                 .ToList();
         }
 

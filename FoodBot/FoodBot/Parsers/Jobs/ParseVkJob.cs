@@ -38,10 +38,11 @@ namespace FoodBot.Parsers.Jobs
                 .OrderBy(x => x.Date)
                 .FirstOrDefault();
 
-            n.Categories = categorizer.Categorize(n.FullText);
+            
 
             if (n != null)
             {
+                n.Categories = categorizer.Categorize(n.FullText);
                 n.IsShown = true;
                 noticeRepository.Add(n);
 
