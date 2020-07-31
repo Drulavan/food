@@ -38,6 +38,11 @@ namespace FoodBot.Dal.Models
         /// </summary>
         public List<string> PhotosUrl { get; set; }
 
+        /// <summary>
+        /// Список категорий
+        /// </summary>
+        public List<Categories> Categories { get; set; }
+
         public bool IsShown { get; set; }
     }
 }

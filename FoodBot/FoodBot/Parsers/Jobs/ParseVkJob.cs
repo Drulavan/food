@@ -1,8 +1,5 @@
-﻿using FoodBot.Dal.Models;
-using FoodBot.Dal.Repositories;
-using Microsoft.Extensions.Configuration;
+﻿using FoodBot.Dal.Repositories;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Telegram.Bot;
@@ -17,12 +14,19 @@ namespace FoodBot.Parsers.Jobs
         private readonly VkParser parser;
 
         private readonly NoticeRepository noticeRepository;
+        private readonly Categorizer categorizer;
 
-        public ParseVkJob( TelegramBotClient client, StateRepository stateRepository, NoticeRepository noticeRepository, VkParser parser)
+        public ParseVkJob(
+            TelegramBotClient client,
+            StateRepository stateRepository,
+            NoticeRepository noticeRepository,
+            VkParser parser,
+            Categorizer categorizer)
             : base(client, stateRepository)
         {
             this.parser = parser;
             this.noticeRepository = noticeRepository;
+            this.categorizer = categorizer;
         }
 
         public async Task Execute()
@@ -30,12 +34,15 @@ namespace FoodBot.Parsers.Jobs
             var notices = await parser.GetNotices();
 
             //берем самую старую запись, но не старше суток
-            var n = notices.Where(x=>x.Date>DateTime.Now.AddDays(-1))
-                .OrderBy(x=>x.Date)
+            var n = notices.Where(x => x.Date > DateTime.Now.AddDays(-1))
+                .OrderBy(x => x.Date)
                 .FirstOrDefault();
+
+            
 
             if (n != null)
             {
+                n.Categories = categorizer.Categorize(n.FullText);
                 n.IsShown = true;
                 noticeRepository.Add(n);
 

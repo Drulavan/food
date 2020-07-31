@@ -1,13 +1,11 @@
 ﻿using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
 using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using VkNet;
 using VkNet.Enums.SafetyEnums;
-using VkNet.Exception;
 using VkNet.Model;
 using VkNet.Model.Attachments;
 

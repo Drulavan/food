@@ -1,8 +1,5 @@
 ﻿using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
-using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,7 +12,7 @@ namespace FoodBot.Parsers.Jobs
     {
         private readonly TelegramBotClient client;
         private readonly StateRepository stateRepository;
-      
+
         public BaseJob(TelegramBotClient client, StateRepository stateRepository)
         {
             this.stateRepository = stateRepository;
@@ -31,7 +28,7 @@ namespace FoodBot.Parsers.Jobs
                 Url = n.Url
             });
 
-            string caption =  $"{n.FullText}" ;
+            string caption = $"{n.FullText}";
 
             using var defaultPhoto = File.OpenRead(".\\Resources\\boxes_food.png");
             var photo = n.PhotosUrl.Where(x => !string.IsNullOrEmpty(x)).ToList().Count > 0 ?
@@ -39,7 +36,7 @@ namespace FoodBot.Parsers.Jobs
 
             foreach (var state in stateRepository.GetAll())
             {
-                 await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
+                await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
             }
         }
     }
