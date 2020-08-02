@@ -1,3 +1,5 @@
+
+![.NET Core](https://github.com/Drulavan/food/workflows/.NET%20Core/badge.svg?branch=master)
 # food
 
 @GiveFood_Bot - продукт для решения проблем P2P-фудшеринга на базе чат-бота.
