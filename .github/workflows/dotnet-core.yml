@@ -17,5 +17,5 @@ jobs:
     - name: Install dependencies
       run: dotnet restore FoodBot
     - name: Build
-      run: dotnet build --configuration Release --no-restore
+      run: dotnet build FoodBot --configuration Release --no-restore
 
