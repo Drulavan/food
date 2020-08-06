@@ -15,6 +15,14 @@ namespace FoodBot.Dal.Models
         public float longitude { get; set; }
         public bool IsRegistered { get; set; }
 
+        /// <summary>
+        /// Группы ВК выбранные пользователем
+        /// </summary>
+        public long[] VkGroups { get; set; }
+
+        /// <summary>
+        /// Категории выбранные пользователем
+        /// </summary>
         public List<Categories> Categories { get; set; }
     }
 }

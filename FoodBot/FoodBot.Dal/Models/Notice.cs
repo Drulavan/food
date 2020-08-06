@@ -9,9 +9,15 @@ namespace FoodBot.Dal.Models
     public class Notice
     {
         /// <summary>
-        /// Идентификатор
+        /// Идентификатор поста
         /// </summary>
         public long Id { get; set; }
+
+        /// <summary>
+        /// Идентификатор группы
+        /// </summary>
+        public long GroupId { get; set; }
+        
 
         /// <summary>
         /// Текст поста
@@ -42,6 +48,11 @@ namespace FoodBot.Dal.Models
         /// Список категорий
         /// </summary>
         public List<Categories> Categories { get; set; }
+
+        /// <summary>
+        /// Город
+        /// </summary>
+        public string City { get; set; }
 
         public bool IsShown { get; set; }
     }
