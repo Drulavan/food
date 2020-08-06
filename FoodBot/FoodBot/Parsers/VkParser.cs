@@ -8,6 +8,7 @@ using VkNet;
 using VkNet.Enums.SafetyEnums;
 using VkNet.Model;
 using VkNet.Model.Attachments;
+using VkNet.Model.RequestParams;
 
 namespace FoodBot.Parsers
 {
@@ -17,7 +18,7 @@ namespace FoodBot.Parsers
     public class VkParser
     {
         private readonly VkApi api;
-        private readonly int[] groups;
+        private readonly Dictionary<string, int[]> groups;
         private readonly NoticeRepository noticeRepository;
 
         public VkParser(IConfiguration configuration, NoticeRepository noticeRepository)
@@ -31,8 +32,8 @@ namespace FoodBot.Parsers
                 ResponseType = ResponseType.Token,
                 ApplicationId = ulong.Parse(configuration["VkAppId"]),
             });
-
-            groups = configuration.GetSection("VkGroups").Get<int[]>();
+            groups = new Dictionary<string, int[]>();
+            configuration.GetSection("VkGroups").Bind(groups);
         }
 
         /// <summary>
@@ -43,9 +44,9 @@ namespace FoodBot.Parsers
         {
             var result = new List<Notice>();
 
-            foreach (long groupId in groups)
+            foreach (long groupId in groups.SelectMany(x => x.Value).Distinct())
             {
-                VkNet.Model.RequestParams.WallGetParams getParams = new VkNet.Model.RequestParams.WallGetParams()
+                WallGetParams getParams = new WallGetParams()
                 {
                     OwnerId = groupId,
                     Count = 10,
@@ -66,6 +67,7 @@ namespace FoodBot.Parsers
                         result.Add(new Notice()
                         {
                             Id = (long)item.Id,
+                            GroupId = groupId,
                             FullText = item.Text,
                             Date = item.Date,
                             Source = 0,

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Text;
+﻿using System.ComponentModel;
 
 namespace FoodBot.Dal.Models
 {
@@ -12,5 +9,17 @@ namespace FoodBot.Dal.Models
 
         [Description("Мясо")]
         Meat,
+
+        [Description("Выпечка")]
+        Bake,
+
+        [Description("Овощи")]
+        Vegetables,
+
+        [Description("Фрукты")]
+        Fruits,
+
+        [Description("Молочная продукция")]
+        Milk,
     }
 }

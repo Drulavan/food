@@ -1,0 +1,14 @@
+{
+  "VkGroups": {
+    "Москва": [
+      -109125816, // https://vk.com/sharingfood
+      -112333338, // https://vk.com/food_sharing
+      -171870386, // https://vk.com/club171870386
+    ],
+    "Санкт-Петербург": [
+      -109125816, // https://vk.com/sharingfood
+      -70298501, // https://vk.com/foodsharing_spb
+      -161997638, // https://vk.com/club_helpfoodspb
+    ]
+  }
+}

@@ -22,9 +22,8 @@ namespace FoodBot
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
                .AddJsonFile("food.json", true, true)
+               .AddJsonFile("vk.json", true, true)
                .Build();
-
-           
 
             //собираем беседы в контейнер
             var collection = new ServiceCollection();

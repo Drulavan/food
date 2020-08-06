@@ -17,7 +17,7 @@ namespace FoodBot.Parsers
         {
             var result = new List<Categories>();
 
-            result.AddRange(MorphologicalAnalysis(SplitWords(message)));
+            result.AddRange(MorphologicalAnalysis(message.ToLower()));
             return result;
         }
 
@@ -35,6 +35,18 @@ namespace FoodBot.Parsers
             foreach (List<string> list in foodDictionary.Values)
             {
                 bool hasMatch = words.Any(x => list.ToList().Any(y => y == x));
+            }
+
+            return result;
+        }
+
+
+        private List<Categories> MorphologicalAnalysis(string words)
+        {
+            List<Categories> result = new List<Categories>();
+            foreach (List<string> list in foodDictionary.Values)
+            {
+                bool hasMatch = list.Any(tag => words.Contains(tag));
             }
 
             return result;
