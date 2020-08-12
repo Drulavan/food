@@ -1,6 +1,7 @@
 ﻿using FoodBot.Dal.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace FoodBot.Parsers
 {
@@ -16,17 +17,20 @@ namespace FoodBot.Parsers
         public List<Categories> Categorize(string message)
         {
             var result = new List<Categories>();
-
-            result.AddRange(MorphologicalAnalysis(message.ToLower()));
+            message = DeletePunctuation(message);
+            result.AddRange(MorphologicalAnalysis(message.ToUpper()));
             return result;
         }
 
         private List<string> SplitWords(string message)
         {
-            var punctuation = message.Where(char.IsPunctuation).Distinct().ToArray();
             return message.Split()
-                .Select(x => x.Trim(punctuation).ToLower())
                 .ToList();
+        }
+
+        private string DeletePunctuation(string message)
+        {
+            return new string(message.Where(c => !char.IsPunctuation(c)).ToArray());
         }
 
         private List<Categories> MorphologicalAnalysis(List<string> words)
@@ -34,7 +38,7 @@ namespace FoodBot.Parsers
             List<Categories> result = new List<Categories>();
             foreach (List<string> list in foodDictionary.Values)
             {
-                bool hasMatch = words.Any(x => list.ToList().Any(y => y == x));
+                bool hasMatch = words.Any(words => list.ToList().Any(y => y.ToUpper() == words));
             }
 
             return result;
@@ -44,9 +48,13 @@ namespace FoodBot.Parsers
         private List<Categories> MorphologicalAnalysis(string words)
         {
             List<Categories> result = new List<Categories>();
-            foreach (List<string> list in foodDictionary.Values)
+            foreach (KeyValuePair<Categories,List<string>> cat in foodDictionary)
             {
-                bool hasMatch = list.Any(tag => words.Contains(tag));
+                bool hasMatch = cat.Value.Any(tag => Regex.IsMatch(words, @$"\b{tag}\b",RegexOptions.IgnoreCase));
+                if (hasMatch)
+                {
+                    result.Add(cat.Key);
+                }
             }
 
             return result;

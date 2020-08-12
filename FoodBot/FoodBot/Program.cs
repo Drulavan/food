@@ -43,17 +43,18 @@ namespace FoodBot
             configuration.GetSection("Categories").Bind(conf);
             var cyrPhrase = new CyrPhrase(new CyrNounCollection(), new CyrAdjectiveCollection());
             var foodDictionary = new Dictionary<Categories, List<string>>();
-            foreach (var cat in conf.Keys)
+            foreach (KeyValuePair<Categories, List<string>> cat in conf)
             {
                 var l = new List<string>();
-                foreach (var list in conf.Values)
+                
+                foreach (var food in cat.Value)
                 {
-                    foreach (var food in list)
-                    {
-                        l.AddRange(cyrPhrase.Decline(food, Cyriller.Model.GetConditionsEnum.Similar).ToList());
-                    }
+                    var s = cyrPhrase.Decline(food.ToLower(), Cyriller.Model.GetConditionsEnum.Similar).ToList();
+                    var p = cyrPhrase.DeclinePlural(food.ToLower(), Cyriller.Model.GetConditionsEnum.Similar).ToList();
+                    l.AddRange(s.Union(p).Where(s => !string.IsNullOrWhiteSpace(s)).Distinct().ToList());
                 }
-                foodDictionary.Add(cat, l);
+
+                foodDictionary.Add(cat.Key, l);
             }
 
             cyrPhrase = null;
