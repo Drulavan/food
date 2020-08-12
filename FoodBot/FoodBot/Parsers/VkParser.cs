@@ -43,8 +43,9 @@ namespace FoodBot.Parsers
         internal async Task<IEnumerable<Notice>> GetNotices()
         {
             var result = new List<Notice>();
+            var g = groups.SelectMany(x => x.Value).Distinct();
 
-            foreach (long groupId in groups.SelectMany(x => x.Value).Distinct())
+            foreach (long groupId in g)
             {
                 WallGetParams getParams = new WallGetParams()
                 {

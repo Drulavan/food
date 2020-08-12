@@ -17,7 +17,9 @@ namespace FoodBot
 {
     internal class Program
     {
+#pragma warning disable IDE0060 // Удалите неиспользуемый параметр
         private static void Main(string[] args)
+#pragma warning restore IDE0060 // Удалите неиспользуемый параметр
         {
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
@@ -69,6 +71,7 @@ namespace FoodBot
             collection.AddTransient<VkParser>();
             collection.AddSingleton(foodDictionary);
             collection.AddTransient<Categorizer>();
+            collection.AddTransient<Geocoding>();
             var serviceProvider = collection.BuildServiceProvider();
 
             // on-start self-check
@@ -85,14 +88,14 @@ namespace FoodBot
             client.OnCallbackQuery += engine.BotOnCallbackQuery;
 
             // endless background job
-            Thread workerThread = new Thread(() =>
+            Thread workerThread = new Thread(async () =>
             {
                 while (true)
                 {
                     var jobs = serviceProvider.GetServices<IJob>().ToList();
                     foreach (IJob j in jobs)
                     {
-                        j.Execute();
+                        await j.Execute();
                     };
                     Thread.Sleep(int.Parse(configuration["JobSleepTimer"]));
                 }
