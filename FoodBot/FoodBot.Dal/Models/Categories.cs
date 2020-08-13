@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel;
-using System.Runtime.InteropServices.ComTypes;
+using System.Reflection;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace FoodBot.Dal.Models
 {
@@ -22,11 +24,19 @@ namespace FoodBot.Dal.Models
 
         [Description("Молочная продукция")]
         Milk,
+    }
 
-        [Description("Крупы")]
-        Groats,
+    public static class CatCateg
+    {
+        public static string DescriptionAttr<T>(this T source)
+        {
+            FieldInfo fi = source.GetType().GetField(source.ToString());
 
-        [Description("Сладости")]
-        Sweets
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
+                typeof(DescriptionAttribute), false);
+
+            if (attributes != null && attributes.Length > 0) return attributes[0].Description;
+            else return source.ToString();
+        }
     }
 }
