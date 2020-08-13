@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace FoodBot.Dal.Models
 {
@@ -24,6 +25,13 @@ namespace FoodBot.Dal.Models
 
         [Description("Молочная продукция")]
         Milk,
+
+
+        [Description("Крупы")]
+        Groats,
+
+        [Description("Сладости")]
+        Sweets
     }
 
     public static class CatCateg
