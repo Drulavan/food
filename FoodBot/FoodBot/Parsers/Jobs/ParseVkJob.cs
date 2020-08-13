@@ -12,21 +12,23 @@ namespace FoodBot.Parsers.Jobs
     public class ParseVkJob : BaseJob, IJob
     {
         private readonly VkParser parser;
-
         private readonly NoticeRepository noticeRepository;
         private readonly Categorizer categorizer;
+        private readonly Geocoding geocoding;
 
         public ParseVkJob(
             TelegramBotClient client,
             StateRepository stateRepository,
             NoticeRepository noticeRepository,
             VkParser parser,
-            Categorizer categorizer)
+            Categorizer categorizer,
+            Geocoding geocoding)
             : base(client, stateRepository)
         {
             this.parser = parser;
             this.noticeRepository = noticeRepository;
             this.categorizer = categorizer;
+            this.geocoding = geocoding;
         }
 
         public async Task Execute()
@@ -41,6 +43,7 @@ namespace FoodBot.Parsers.Jobs
             if (n != null)
             {
                 n.Categories = categorizer.Categorize(n.FullText);
+                await geocoding.GetCoordinatesAsync(n.FullText);
                 n.IsShown = true;
                 noticeRepository.Add(n);
 

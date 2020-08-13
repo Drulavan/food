@@ -44,13 +44,12 @@ namespace FoodBot.Parsers
             return result;
         }
 
-
         private List<Categories> MorphologicalAnalysis(string words)
         {
             List<Categories> result = new List<Categories>();
-            foreach (KeyValuePair<Categories,List<string>> cat in foodDictionary)
+            foreach (KeyValuePair<Categories, List<string>> cat in foodDictionary)
             {
-                bool hasMatch = cat.Value.Any(tag => Regex.IsMatch(words, @$"\b{tag}\b",RegexOptions.IgnoreCase));
+                bool hasMatch = cat.Value.Any(tag => Regex.IsMatch(words, @$"\b{tag}\b", RegexOptions.IgnoreCase));
                 if (hasMatch)
                 {
                     result.Add(cat.Key);
