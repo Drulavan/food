@@ -43,7 +43,14 @@ namespace FoodBot.Parsers.Jobs
             if (n != null)
             {
                 n.Categories = categorizer.Categorize(n.FullText);
-                await geocoding.GetCoordinatesAsync(n.FullText);
+                var coordinates = await geocoding.GetCoordinatesAsync(n.FullText);
+
+                if(coordinates.Results.Any())
+                {
+                    n.Latitude = coordinates.Results.FirstOrDefault().Geometry.Location.Latitude;
+                    n.Longitude = coordinates.Results.FirstOrDefault().Geometry.Location.Longitude;
+                }
+            
                 n.IsShown = true;
                 noticeRepository.Add(n);
 

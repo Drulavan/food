@@ -21,6 +21,7 @@ namespace FoodBot.Parsers
             {
                 Key = apiKey,
                 Address = address,
+                Language = GoogleApi.Entities.Common.Enums.Language.Russian
             };
 
             var result = await GoogleMaps.AddressGeocode.QueryAsync(request);
