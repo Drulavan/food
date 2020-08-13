@@ -1,7 +1,12 @@
 using FoodBot.Dal.Models;
+using FoodBot.Parsers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using System.ComponentModel;
+using System.Reflection;
+using System.Linq;
+using System;
 
 namespace FoodBot.Conversations
 {
@@ -27,7 +32,7 @@ namespace FoodBot.Conversations
                    ResizeKeyboard = true,
                    OneTimeKeyboard = true
                };
-   */
+  
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
@@ -54,8 +59,33 @@ namespace FoodBot.Conversations
             Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст:", replyMarkup: keyboard);
             if (message.Text == "Мужчина" || message.Text == "Женщина")
             {
-                userState.ConversationState = ConversationState.Years;
+                
             }
+            var keyboard = new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                                                     new[] //
+                                                   {
+                                                                 new KeyboardButton(Categories.Fish.ToString()),
+                                                                   new KeyboardButton(Categories.Meat.ToString())
+                                                   },
+                                                         new[] //
+                                                   {
+                                                                 new KeyboardButton(Categories.Bake.ToString()),
+                                                                   new KeyboardButton(Categories.Vegetables.ToString())
+                                                   },
+                                                             new[] //
+                                                   {
+                                                                 new KeyboardButton(Categories.Fruits.ToString()),
+                                                                   new KeyboardButton(Categories.Milk.ToString())
+                                                   },
+               },
+                ResizeKeyboard = true,
+                OneTimeKeyboard = true
+            };*/
+            Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов");
+          
+            userState.ConversationState = ConversationState.END;
             return userState;
         }
     }
