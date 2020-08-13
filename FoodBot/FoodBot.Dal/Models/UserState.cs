@@ -11,8 +11,9 @@ namespace FoodBot.Dal.Models
 
         public ConversationState ConversationState { get; set; }
         public long Id { get; set; }
-        public float latitude { get; set; }
-        public float longitude { get; set; }
+        public float UsrLatitude { get; set; }
+        public float UsrLongitude { get; set; }
+        public int RadiusFind { get; set; }
         public bool IsRegistered { get; set; }
 
         /// <summary>
