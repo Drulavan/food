@@ -1,4 +1,5 @@
 ﻿using FoodBot.Dal.Repositories;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,21 +13,24 @@ namespace FoodBot.Parsers.Jobs
     public class ParseVkJob : BaseJob, IJob
     {
         private readonly VkParser parser;
-
         private readonly NoticeRepository noticeRepository;
         private readonly Categorizer categorizer;
+        private readonly Geocoding geocoding;
 
         public ParseVkJob(
             TelegramBotClient client,
             StateRepository stateRepository,
             NoticeRepository noticeRepository,
             VkParser parser,
-            Categorizer categorizer)
-            : base(client, stateRepository)
+            Categorizer categorizer,
+            Geocoding geocoding,
+            ILogger logger)
+            : base(client, stateRepository, logger)
         {
             this.parser = parser;
             this.noticeRepository = noticeRepository;
             this.categorizer = categorizer;
+            this.geocoding = geocoding;
         }
 
         public async Task Execute()
@@ -41,7 +45,16 @@ namespace FoodBot.Parsers.Jobs
             if (n != null)
             {
                 n.Categories = categorizer.Categorize(n.FullText);
+                var coordinates = await geocoding.GetCoordinatesAsync(n.FullText);
+
+                if(coordinates.Results.Any())
+                {
+                    n.Latitude = coordinates.Results.FirstOrDefault().Geometry.Location.Latitude;
+                    n.Longitude = coordinates.Results.FirstOrDefault().Geometry.Location.Longitude;
+                }
+            
                 n.IsShown = true;
+                Logger.Information("Add notice {@n}", n);
                 noticeRepository.Add(n);
 
                 // отправляем сообщение

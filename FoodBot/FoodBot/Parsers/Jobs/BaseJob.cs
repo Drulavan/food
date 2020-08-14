@@ -1,5 +1,6 @@
 ﻿using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
+using Serilog;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace FoodBot.Parsers.Jobs
     {
         private readonly TelegramBotClient client;
         private readonly StateRepository stateRepository;
+        protected readonly ILogger Logger;
 
-        public BaseJob(TelegramBotClient client, StateRepository stateRepository)
+        public BaseJob(TelegramBotClient client, StateRepository stateRepository, ILogger logger)
         {
             this.stateRepository = stateRepository;
             this.client = client;
+            Logger = logger;
         }
 
         public virtual async Task SendNoticeAsync(Notice n)
@@ -34,10 +37,13 @@ namespace FoodBot.Parsers.Jobs
             var photo = n.PhotosUrl.Where(x => !string.IsNullOrEmpty(x)).ToList().Count > 0 ?
                    new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
 
-            foreach (var state in stateRepository.GetAll())
+            var users = stateRepository.GetAll();
+            foreach (var user in users)
             {
-                await client.SendPhotoAsync(state.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
+                await client.SendPhotoAsync(user.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
             }
+
+            Logger.Information("Message {id} sent to @{users}",n.Id , users);
         }
     }
 }
