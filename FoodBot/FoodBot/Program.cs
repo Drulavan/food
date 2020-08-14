@@ -6,6 +6,7 @@ using FoodBot.Parsers;
 using FoodBot.Parsers.Jobs;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,12 @@ namespace FoodBot
         private static void Main(string[] args)
 #pragma warning restore IDE0060 // Удалите неиспользуемый параметр
         {
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("logs\\foodbot.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
+
             IConfiguration configuration = new ConfigurationBuilder()
                .AddJsonFile("appsettings.json", true, true)
                .AddJsonFile("food.json", true, true)
@@ -70,6 +77,7 @@ namespace FoodBot
             collection.AddTransient<NoticeRepository>();
             collection.AddTransient<VkParser>();
             collection.AddSingleton(foodDictionary);
+            collection.AddSingleton<ILogger>(logger);
             collection.AddTransient<Categorizer>();
             collection.AddTransient<Geocoding>();
             var serviceProvider = collection.BuildServiceProvider();

@@ -1,4 +1,5 @@
 ﻿using FoodBot.Dal.Repositories;
+using Serilog;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,8 +23,9 @@ namespace FoodBot.Parsers.Jobs
             NoticeRepository noticeRepository,
             VkParser parser,
             Categorizer categorizer,
-            Geocoding geocoding)
-            : base(client, stateRepository)
+            Geocoding geocoding,
+            ILogger logger)
+            : base(client, stateRepository, logger)
         {
             this.parser = parser;
             this.noticeRepository = noticeRepository;
@@ -52,6 +54,7 @@ namespace FoodBot.Parsers.Jobs
                 }
             
                 n.IsShown = true;
+                Logger.Information("Add notice {@n}", n);
                 noticeRepository.Add(n);
 
                 // отправляем сообщение
