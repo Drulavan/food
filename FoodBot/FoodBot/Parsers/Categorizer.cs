@@ -21,27 +21,9 @@ namespace FoodBot.Parsers
             result.AddRange(MorphologicalAnalysis(message.ToUpper()));
             return result;
         }
-
-        private List<string> SplitWords(string message)
-        {
-            return message.Split()
-                .ToList();
-        }
-
         private string DeletePunctuation(string message)
         {
             return new string(message.Where(c => !char.IsPunctuation(c)).ToArray());
-        }
-
-        private List<Categories> MorphologicalAnalysis(List<string> words)
-        {
-            List<Categories> result = new List<Categories>();
-            foreach (List<string> list in foodDictionary.Values)
-            {
-                bool hasMatch = words.Any(words => list.ToList().Any(y => y.ToUpper() == words));
-            }
-
-            return result;
         }
 
         private List<Categories> MorphologicalAnalysis(string words)
