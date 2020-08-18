@@ -7,11 +7,13 @@ using System.ComponentModel;
 using System.Reflection;
 using System.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace FoodBot.Conversations
 {
     internal class SXConversation : ConversationBase, IConversation
     {
+        List<string> MenuList = new List<string>();
         public SXConversation(TelegramBotClient client) : base(client)
         {
         }
@@ -20,72 +22,60 @@ namespace FoodBot.Conversations
 
         public UserState Execute(Message message, UserState userState)
         {
-            /*           var keyboard = new ReplyKeyboardMarkup
-               {
-                   Keyboard = new[] {
-                                                     new[] //
-                                                   {
-                                                       new KeyboardButton("Мужчина"),
-                                                       new KeyboardButton("Женщина")
-                                                   },
-               },
-                   ResizeKeyboard = true,
-                   OneTimeKeyboard = true
-               };
-  
-            var keyboard = new ReplyKeyboardMarkup
-            {
-                Keyboard = new[] {
-                                                  new[] //
-                                                {
-                                                                new KeyboardButton("до 25 лет"),
-                                                                new KeyboardButton("25-34лет")
-                                                },
-                                                new[]
-                                                {
-                                                                new KeyboardButton("35-44лет"),
-                                                                new KeyboardButton("45-54лет")
-                                               },
-                                                new[]
-                                                 {
-                                                                new KeyboardButton("55-65лет"),
-                                                                new KeyboardButton("более 65 лет")
-                                                },
-                },
-                ResizeKeyboard = true,
-                OneTimeKeyboard = true
-            };
-
-            Client.SendTextMessageAsync(message.Chat.Id, "Выберите Ваш возраст:", replyMarkup: keyboard);
-            if (message.Text == "Мужчина" || message.Text == "Женщина")
-            {
-                
-            }
             var keyboard = new ReplyKeyboardMarkup
             {
                 Keyboard = new[] {
                                                      new[] //
                                                    {
-                                                                 new KeyboardButton(Categories.Fish.ToString()),
-                                                                   new KeyboardButton(Categories.Meat.ToString())
+                                                                 new KeyboardButton(Categories.Fish.DescriptionAttr()),
+                                                                   new KeyboardButton(Categories.Meat.DescriptionAttr())
                                                    },
                                                          new[] //
                                                    {
-                                                                 new KeyboardButton(Categories.Bake.ToString()),
-                                                                   new KeyboardButton(Categories.Vegetables.ToString())
+                                                                 new KeyboardButton(Categories.Bake.DescriptionAttr()),
+                                                                   new KeyboardButton(Categories.Vegetables.DescriptionAttr())
                                                    },
                                                              new[] //
                                                    {
-                                                                 new KeyboardButton(Categories.Fruits.ToString()),
-                                                                   new KeyboardButton(Categories.Milk.ToString())
+                                                                 new KeyboardButton(Categories.Fruits.DescriptionAttr()),
+                                                                   new KeyboardButton(Categories.Milk.DescriptionAttr())
+                                                   },
+                                                                       new[] //
+                                                   {
+                                                                 new KeyboardButton(Categories.Groats.DescriptionAttr()),
+                                                                   new KeyboardButton(Categories.Sweets.DescriptionAttr())
+                                                   },
+                                                                       new[] //
+                                                   {
+                                                                 new KeyboardButton("Закрыть меню выбора")
+
                                                    },
                },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
-            };*/
-            Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов");
-          
-            userState.ConversationState = ConversationState.END;
+            };
+          //  Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+            if (message.Text == "Закрыть меню выбора")
+            {
+
+                Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
+                userState.menuCat = MenuList.ToArray();
+              /*  foreach (string i in userState.menuCat)
+                {
+                    Console.WriteLine(i);
+                }*/
+                userState.ConversationState = ConversationState.END;
+            }
+            else
+            {
+                Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+               
+                        //Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+                            MenuList.Add(message.Text);
+                
+                userState.ConversationState = ConversationState.SeX;
+                       
+            }
             return userState;
         }
     }
