@@ -15,6 +15,7 @@ namespace FoodBot.Dal.Models
         public float UsrLongitude { get; set; }
         public int RadiusFind { get; set; }
         public bool IsRegistered { get; set; }
+        public string[] menuCat;
 
         /// <summary>
         /// Группы ВК выбранные пользователем
