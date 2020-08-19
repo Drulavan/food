@@ -1,7 +1,9 @@
 ﻿using GoogleApi;
+using GoogleApi.Entities.Common.Enums;
 using GoogleApi.Entities.Maps.Geocoding;
 using GoogleApi.Entities.Maps.Geocoding.Address.Request;
 using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace FoodBot.Parsers
@@ -21,7 +23,7 @@ namespace FoodBot.Parsers
             {
                 Key = apiKey,
                 Address = address,
-                Language = GoogleApi.Entities.Common.Enums.Language.Russian
+                Language = Language.Russian,
             };
 
             var result = await GoogleMaps.AddressGeocode.QueryAsync(request);

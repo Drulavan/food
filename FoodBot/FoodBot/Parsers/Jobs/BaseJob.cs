@@ -43,7 +43,7 @@ namespace FoodBot.Parsers.Jobs
                 await client.SendPhotoAsync(user.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
             }
 
-            Logger.Information("Message {id} sent to @{users}",n.Id , users);
+            Logger.Information("Message {id} sent to {@users}", n.Id , users);
         }
     }
 }
