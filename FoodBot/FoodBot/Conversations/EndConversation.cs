@@ -15,7 +15,7 @@ namespace FoodBot.Conversations
 
         public UserState Execute(Message message, UserState userState)
         {
-            Console.WriteLine(userState.menuCat);
+         
             //userState.ConversationState = ConversationState.None;
             // Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
             return userState;

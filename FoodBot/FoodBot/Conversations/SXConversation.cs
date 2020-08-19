@@ -69,11 +69,19 @@ namespace FoodBot.Conversations
             else
             {
                 Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
-               
-                        //Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
-                            MenuList.Add(message.Text);
+
+                //Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+                if (MenuList.Contains(message.Text) == true)
+                {
+                    Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию");
+                    //userState.ConversationState = ConversationState.SeX;
+                }
+                else
+                {
+                    MenuList.Add(message.Text);
+                    userState.ConversationState = ConversationState.SeX;
+                }
                 
-                userState.ConversationState = ConversationState.SeX;
                        
             }
             return userState;
