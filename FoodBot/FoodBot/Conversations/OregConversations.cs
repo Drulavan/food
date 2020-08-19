@@ -53,26 +53,36 @@ namespace FoodBot.Conversations
 
             userState.UsrLatitude = message.Location.Latitude;
             userState.UsrLongitude = message.Location.Longitude;
+
             
+                        if ((userState.UsrLatitude > minusLatM && userState.UsrLatitude < plusLatM) && (userState.UsrLongitude > minusLotM && userState.UsrLongitude < plusLotM)) /*||
+                        ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP)))*/
+      {
+          userState.SityName = "Москва";
+          Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
+          userState.IsRegistered = true;
 
-            if (((userState.UsrLatitude > minusLatM && userState.UsrLatitude < plusLatM) && (userState.UsrLongitude > minusLotM && userState.UsrLongitude < plusLotM)) ||
-            ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP)))
-            {
-                Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
-                userState.IsRegistered = true;
+          userState.ConversationState = ConversationState.Reg;
+      }
+      else if ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP))
+      {
+          userState.SityName = "Санкт-Петербург";
+          Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
+          userState.IsRegistered = true;
 
-                userState.ConversationState = ConversationState.Reg;
-            }
-            else
-            {
-                Client.SendTextMessageAsync(message.Chat.Id, $"К сожалению в Вашем городе не работаем");
-            }
-           
-           /* Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
+          userState.ConversationState = ConversationState.Reg;
+      }
+              else
+      {
+          Client.SendTextMessageAsync(message.Chat.Id, $"К сожалению в Вашем городе не работаем");
+      }
+
+/*  Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
 
 
-            userState.ConversationState = ConversationState.Reg; */
-            return userState;
-        }
-    }
+ userState.ConversationState = ConversationState.Reg;*/
+return userState;
 }
+}
+}
+ 
