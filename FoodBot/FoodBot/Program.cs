@@ -103,7 +103,14 @@ namespace FoodBot
                     var jobs = serviceProvider.GetServices<IJob>().ToList();
                     foreach (IJob j in jobs)
                     {
-                        await j.Execute();
+                        try
+                        {
+                            await j.Execute();
+                        }
+                        catch(Exception ex)
+                        {
+                            logger.Error("{@ex}", ex);
+                        }
                     };
                     Thread.Sleep(int.Parse(configuration["JobSleepTimer"]));
                 }

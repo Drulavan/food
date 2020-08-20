@@ -62,7 +62,7 @@ namespace FoodBot.Parsers
                         foreach (var atch in item.Attachments)
                         {
                             if (atch.Type.Name == "Photo")
-                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}"));
+                                photos.Add(GetPhotoUrl($"{groupId}_{atch.Instance.Id}_{atch.Instance.AccessKey}"));
                         }
 
                         result.Add(new Notice()
