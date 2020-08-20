@@ -1,6 +1,7 @@
 ﻿using FoodBot.Dal.Models;
 using FoodBot.Dal.Repositories;
 using Serilog;
+using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -37,13 +38,47 @@ namespace FoodBot.Parsers.Jobs
             var photo = n.PhotosUrl.Where(x => !string.IsNullOrEmpty(x)).ToList().Count > 0 ?
                    new Telegram.Bot.Types.InputFiles.InputOnlineFile(n.PhotosUrl[0]) : new Telegram.Bot.Types.InputFiles.InputOnlineFile(defaultPhoto);
 
-            var users = stateRepository.GetAll();
+            var users = stateRepository.GetAll().Where(
+                x => x.IsRegistered
+                && x.menuCat.Any(x=>n.Categories.Select(x=>x.DescriptionAttr()).Contains(x))
+                && GetDistance(n, x) <= x.RadiusFind
+                ).ToList();
             foreach (var user in users)
             {
                 await client.SendPhotoAsync(user.Id, photo, caption: caption, replyMarkup: inlineKeyboard);
             }
 
             Logger.Information("Message {id} sent to {@users}", n.Id , users);
+        }
+
+        private double GetDistance(Notice n, UserState u)
+        {
+            // The radius of the earth in Km.
+            // You could also use a better estimation of the radius of the earth
+            // using decimals digits, but you have to change then the int to double.
+            int R = 6371;
+
+            double f1 = ConvertToRadians(n.Latitude);
+            double f2 = ConvertToRadians(u.UsrLatitude);
+
+            double df = ConvertToRadians(n.Latitude - u.UsrLatitude);
+            double dl = ConvertToRadians(n.Longitude - u.UsrLongitude);
+
+            double a = Math.Sin(df / 2) * Math.Sin(df / 2) +
+            Math.Cos(f1) * Math.Cos(f2) *
+            Math.Sin(dl / 2) * Math.Sin(dl / 2);
+
+            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+
+            // Calculate the distance.
+            double d = R * c;
+
+            return d;
+        }
+
+        private double ConvertToRadians(double angle)
+        {
+            return (Math.PI / 180) * angle;
         }
     }
 }

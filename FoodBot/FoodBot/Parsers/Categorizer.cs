@@ -17,15 +17,10 @@ namespace FoodBot.Parsers
         public List<Categories> Categorize(string message)
         {
             var result = new List<Categories>();
-            message = DeletePunctuation(message);
-            result.AddRange(MorphologicalAnalysis(message.ToUpper()));
+            result.AddRange(MorphologicalAnalysis(message.RemovePunctuation().ToUpper()));
             return result;
         }
-        private string DeletePunctuation(string message)
-        {
-            return new string(message.Where(c => !char.IsPunctuation(c)).ToArray());
-        }
-
+       
         private List<Categories> MorphologicalAnalysis(string words)
         {
             List<Categories> result = new List<Categories>();
