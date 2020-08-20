@@ -17,7 +17,7 @@ namespace FoodBot.Dal.Models
         public string SityName { get; set; }
         public bool IsRegistered { get; set; }
 
-        public string[] menuCat;
+        public string[] menuCat { get; set; }
 
         /// <summary>
         /// Группы ВК выбранные пользователем
