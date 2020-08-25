@@ -47,10 +47,11 @@ namespace FoodBot.Parsers.Jobs
                 n.Categories = categorizer.Categorize(n.FullText);
                 var coordinates = await geocoding.GetCoordinatesAsync(n.FullText.RemovePunctuation());
 
-                if ((bool)coordinates?.Results.Any())
+
+                if ((coordinates?.Results?.Any()).HasValue)
                 {
-                    n.Latitude = coordinates.Results.FirstOrDefault().Geometry.Location.Latitude;
-                    n.Longitude = coordinates.Results.FirstOrDefault().Geometry.Location.Longitude;
+                    n.Latitude = coordinates.Results.FirstOrDefault() != null ? coordinates.Results.FirstOrDefault().Geometry.Location.Latitude:0;
+                    n.Longitude = coordinates.Results.FirstOrDefault() != null ? coordinates.Results.FirstOrDefault().Geometry.Location.Longitude : 0;
                 }
             
                 n.IsShown = true;
