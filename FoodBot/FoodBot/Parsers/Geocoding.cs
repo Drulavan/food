@@ -6,6 +6,7 @@ using GoogleApi.Entities.Maps.Geocoding.Location.Request;
 using GoogleApi.Entities.Maps.Geocoding.Place.Request;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace FoodBot.Parsers
@@ -24,6 +25,11 @@ namespace FoodBot.Parsers
             if (string.IsNullOrEmpty(address))
             {
                 return new GeocodeResponse();
+            }
+
+            if (address.Length > 6000)
+            {
+                address = address.Substring(0, 6000);
             }
 
             var request = new AddressGeocodeRequest
