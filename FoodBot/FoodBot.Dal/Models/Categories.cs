@@ -26,12 +26,17 @@ namespace FoodBot.Dal.Models
         [Description("Молочная продукция")]
         Milk,
 
-
         [Description("Крупы")]
         Groats,
 
         [Description("Сладости")]
-        Sweets
+        Sweets,
+
+        [Description("Напитки")]
+        Beverages,
+
+        [Description("Готовые блюда")]
+        Meal
     }
 
     public static class CatCateg
