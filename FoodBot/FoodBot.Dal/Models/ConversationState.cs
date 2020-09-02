@@ -7,11 +7,8 @@
         Reg,
 
         Oreg,
-         SeX,
 
-        Years,
-
-        Allergy,    
+        SeX,
 
         END
        
