@@ -4,16 +4,13 @@
     {
         None,
 
-        Reg,
-
         Oreg,
-         SeX,
+        
+        Reg,
+        
+        SeX,
 
-        Years,
-
-        Allergy,    
-
-        END
+       END
        
 
     }

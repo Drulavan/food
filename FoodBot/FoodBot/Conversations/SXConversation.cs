@@ -54,36 +54,69 @@ namespace FoodBot.Conversations
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
-          //  Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
-            if (message.Text == "Закрыть меню выбора")
-            {
+           // Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
 
-                Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
-                userState.menuCat = MenuList.ToArray();
-              /*  foreach (string i in userState.menuCat)
-                {
-                    Console.WriteLine(i);
-                }*/
-                userState.ConversationState = ConversationState.END;
+            switch(message.Text)
+            {
+                case "Закрыть меню выбора":
+                    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
+                    userState.menuCat = MenuList.ToArray();
+                    userState.ConversationState = ConversationState.END;
+                    break;
+                case "Мясо":
+                case "Рыба":
+                case "Выпечка":
+                case "Овощи":
+                case "Фрукты":
+                case "Молочная продукция":
+                case "Крупы":
+                case "Сладости":
+                    if (MenuList.Contains(message.Text) == true)
+                    {
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию.Выберите другую", replyMarkup: keyboard);
+                        //userState.ConversationState = ConversationState.SeX;
+                    }
+                    else
+                    {
+                        MenuList.Add(message.Text);
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+                        userState.ConversationState = ConversationState.SeX;
+                    }
+                    break;
+                default:
+                    Client.SendTextMessageAsync(message.Chat.Id, $"Вы ввели некорректно данные.Выберите пожалуйста категории продуктов", replyMarkup: keyboard);
+                    break;
+
             }
-            else
-            {
-                Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+            //if (message.Text == "Закрыть меню выбора")
+            //{
 
-                //Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
-                if (MenuList.Contains(message.Text) == true)
-                {
-                    Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию");
-                    //userState.ConversationState = ConversationState.SeX;
-                }
-                else
-                {
-                    MenuList.Add(message.Text);
-                    userState.ConversationState = ConversationState.SeX;
-                }
+            //    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
+            //    userState.menuCat = MenuList.ToArray();
+            //  /*  foreach (string i in userState.menuCat)
+            //    {
+            //        Console.WriteLine(i);
+            //    }*/
+            //    userState.ConversationState = ConversationState.END;
+            //}
+            //else
+            //{
+            //    Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+
+            //    //Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+            //    if (MenuList.Contains(message.Text) == true)
+            //    {
+            //        Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию");
+            //        //userState.ConversationState = ConversationState.SeX;
+            //    }
+            //    else
+            //    {
+            //        MenuList.Add(message.Text);
+            //        userState.ConversationState = ConversationState.SeX;
+            //    }
                 
                        
-            }
+            //}
             return userState;
         }
     }
