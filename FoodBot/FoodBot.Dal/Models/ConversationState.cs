@@ -4,13 +4,13 @@
     {
         None,
 
-        Reg,
-
         Oreg,
-
+        
+        Reg,
+        
         SeX,
 
-        END
+       END
        
 
     }
