@@ -71,31 +71,7 @@ namespace FoodBot.Conversations
                 Client.SendTextMessageAsync(message.Chat.Id, $"Неверно введен радиус,введите заново радиус");
                 userState.ConversationState = ConversationState.Reg;
             }
-            /*  if (message.Text == "Да")
-             {
-                 userState.ConversationState = ConversationState.SeX;
-                 var keyboard = new ReplyKeyboardMarkup
-                 {
-                     Keyboard = new[] {
-                                                   new[] //
-                                                 {
-                                                     new KeyboardButton("Мужчина"),
-                                                     new KeyboardButton("Женщина")
-                                                 },
-             },
-                     ResizeKeyboard = true,
-                     OneTimeKeyboard = true
-                 };
-                 userState.IsRegistered = true;
-                 Client.SendTextMessageAsync(message.Chat.Id, "Выберите свой пол:", replyMarkup: keyboard);
-             }
-             if (message.Text == "Нет")
-             {
-                 userState.ConversationState = ConversationState.END;
-                 Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
-             }
-
- */
+          
             return userState;
         }
     }
