@@ -40,6 +40,7 @@ namespace FoodBot.Parsers.Jobs
 
             var users = stateRepository.GetAll().Where(
                 x => x.IsRegistered
+                && x.menuCat != null
                 && x.menuCat.Any(x=>n.Categories.Select(x=>x.DescriptionAttr()).Contains(x))
                 && GetDistance(n, x) <= x.RadiusFind
                 ).ToList();
