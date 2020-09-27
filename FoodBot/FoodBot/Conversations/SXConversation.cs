@@ -60,6 +60,7 @@ namespace FoodBot.Conversations
             {
                 case "Закрыть меню выбора":
                     Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
+                    userState.MenuListCat = MenuList;
                     userState.menuCat = MenuList.ToArray();
                     userState.ConversationState = ConversationState.END;
                     break;
@@ -73,13 +74,13 @@ namespace FoodBot.Conversations
                 case "Сладости":
                     if (MenuList.Contains(message.Text) == true)
                     {
-                        Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию.Выберите другую", replyMarkup: keyboard);
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию. Выберите другую категорию продуктов, которые Вы готовы забирать", replyMarkup: keyboard);
                         //userState.ConversationState = ConversationState.SeX;
                     }
                     else
                     {
                         MenuList.Add(message.Text);
-                        Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов", replyMarkup: keyboard);
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Добавить ещё одну категорию?", replyMarkup: keyboard);
                         userState.ConversationState = ConversationState.SeX;
                     }
                     break;
