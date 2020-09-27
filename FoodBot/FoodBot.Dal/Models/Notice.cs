@@ -55,5 +55,9 @@ namespace FoodBot.Dal.Models
         public string City { get; set; }
 
         public bool IsShown { get; set; }
+
+        public double Latitude { get; set; }
+
+        public double Longitude { get; set; }
     }
 }
