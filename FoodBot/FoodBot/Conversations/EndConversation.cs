@@ -111,11 +111,13 @@ namespace FoodBot.Conversations
                         Client.SendTextMessageAsync(message.Chat.Id, "Список пуст");
                     }
                     break;
+
                 case "Удалить категорию":
                     Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите удалить", replyMarkup: keyboard1);
                     userState.ConversationState = ConversationState.DelCL;
 
                     break;
+
                 case "Добавить категорию":
                     Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите добавить", replyMarkup: keyboard1);
                     userState.ConversationState = ConversationState.SeX;
