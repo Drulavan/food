@@ -59,7 +59,8 @@ namespace FoodBot.Conversations
             switch(message.Text)
             {
                 case "Закрыть меню выбора":
-                    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
+                    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!\n" +
+                        "Для открытие меню наберите любой символ ");
                     userState.MenuListCat = MenuList;
                     userState.menuCat = MenuList.ToArray();
                     userState.ConversationState = ConversationState.END;

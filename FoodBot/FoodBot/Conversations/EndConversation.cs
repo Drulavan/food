@@ -21,14 +21,21 @@ namespace FoodBot.Conversations
 
         public UserState Execute(Message message, UserState userState)
         {
-            if (userState.MenuListCat.Count==0)
+            List<string> MLC = new List<string>();
+            if (userState.MenuListCat==null)
             {
                 var MC = userState.menuCat;
 
                 foreach (string ms in MC)
+                    
                 {
-                   userState.MenuListCat.Add(ms);
+                   MLC.Add(ms);
+                   
                 }
+                
+                userState.MenuListCat=MLC;
+                
+
             }
             var ListCat = userState.MenuListCat;
             var keyboard = new ReplyKeyboardMarkup
@@ -36,11 +43,22 @@ namespace FoodBot.Conversations
                 Keyboard = new[] {
                                                      new[] //
                                                    {
-                                                                 new KeyboardButton("Просмотреть"),
-                                                                   new KeyboardButton("Удалить"),
-                                                                     new KeyboardButton("Добавить")
+                                                                 new KeyboardButton("Просмотреть список категории")
+                                                                  
                                                    },
-                                                 
+                                                       new[] //
+                                                   {
+                                                                
+                                                                   new KeyboardButton("Удалить категорию"),
+                                                                     new KeyboardButton("Добавить категорию")
+                                                   },
+                                                   //        new[] //
+                                                   //{
+
+                                                   //                new KeyboardButton("Изменить радиус поиска"),
+                                                   //                  new KeyboardButton("Изменить геолокацию")
+                                                   //},
+
                },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
@@ -79,7 +97,7 @@ namespace FoodBot.Conversations
             };
             switch (message.Text)
             {
-                case "Просмотреть":
+                case "Просмотреть список категории":
                     if (userState.MenuListCat.Count!= 0) {
                        
 
@@ -93,16 +111,26 @@ namespace FoodBot.Conversations
                         Client.SendTextMessageAsync(message.Chat.Id, "Список пуст");
                     }
                     break;
-                case "Удалить":
+                case "Удалить категорию":
                     Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите удалить", replyMarkup: keyboard1);
                     userState.ConversationState = ConversationState.DelCL;
 
                     break;
-                case "Добавить":
+                case "Добавить категорию":
                     Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите добавить", replyMarkup: keyboard1);
                     userState.ConversationState = ConversationState.SeX;
 
                     break;
+                //case "Изменить радиус поиска":
+                //    Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите удалить", replyMarkup: keyboard1);
+                //    userState.ConversationState = ConversationState.DelCL;
+
+                //    break;
+                //case "Изменить геолокацию":
+                //    Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите добавить", replyMarkup: keyboard1);
+                //    userState.ConversationState = ConversationState.SeX;
+
+                //    break;
 
                 default:
                     Client.SendTextMessageAsync(message.Chat.Id, "Введите одну из команд", replyMarkup: keyboard);
