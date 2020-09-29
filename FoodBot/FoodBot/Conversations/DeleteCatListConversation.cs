@@ -2,26 +2,25 @@
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
-using System;
 
 namespace FoodBot.Conversations
 {
-    internal class RegistrationConversation : ConversationBase, IConversation
+    internal class DeleteCatListConversation : ConversationBase, IConversation
     {
-
-        bool isInt;
-        int Radius;
-        public RegistrationConversation(TelegramBotClient client) : base(client)
+        public DeleteCatListConversation(TelegramBotClient client) : base(client)
         {
         }
 
-        public ConversationState ConversationState => ConversationState.Reg;
+        public ConversationState ConversationState => ConversationState.DelCL;
 
         public UserState Execute(Message message, UserState userState)
         {
-               var keyboard = new ReplyKeyboardMarkup
-               {
-                   Keyboard = new[] {
+            
+            var ListCat = userState.MenuListCat;
+            var keyboard = new ReplyKeyboardMarkup
+             
+             {
+                 Keyboard = new[] {
                                                      new[] //
                                                    {
                                                                  new KeyboardButton(Categories.Fish.DescriptionAttr()),
@@ -45,33 +44,56 @@ namespace FoodBot.Conversations
                                                                        new[] //
                                                    {
                                                                  new KeyboardButton("Закрыть меню выбора")
-                                                                 
+
                                                    },
                },
-                   ResizeKeyboard = true,
-                   OneTimeKeyboard = true
-               };
-
-               
-            // Client.SendTextMessageAsync(message.Chat.Id, "Хотите зарегистрироваться?", replyMarkup: keyboard);
-
-            isInt = Int32.TryParse(message.Text, out Radius);
-            if (isInt == true)
+                 ResizeKeyboard = true,
+                 OneTimeKeyboard = true
+             };
+            switch (message.Text)
             {
 
-                userState.RadiusFind = Radius;
-                //  Console.WriteLine(userState.RadiusFind); 
-               Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категории продуктов, которые Вы готовы забирать", replyMarkup: keyboard);
-               
-                userState.ConversationState = ConversationState.SeX;
+                case "Мясо":
+                case "Рыба":
+                case "Выпечка":
+                case "Овощи":
+                case "Фрукты":
+                case "Молочная продукция":
+                case "Крупы":
+                case "Сладости":
 
+
+                    if (userState.MenuListCat.Contains(message.Text) == true)
+                    {
+                        ListCat.Remove(message.Text);
+
+                        userState.MenuListCat = ListCat;
+                        userState.menuCat = ListCat.ToArray();
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Удалить ещё одну категорию?", replyMarkup: keyboard);
+                        userState.ConversationState = ConversationState.DelCL;
+
+                    }
+                    else if (userState.MenuListCat.Count == 0)
+                    {
+                        Client.SendTextMessageAsync(message.Chat.Id, "Список пуст,нажмите в меню Закрыть меню выбора", replyMarkup: keyboard);
+                        userState.ConversationState = ConversationState.END;
+                    }
+
+
+
+                    else
+                    {
+                        Client.SendTextMessageAsync(message.Chat.Id, "Хотите удалить ещё категорию?",replyMarkup: keyboard);
+                    }
+                    break;
+                case "Закрыть меню выбора":
+                    userState.ConversationState = ConversationState.END;
+                    break;
+                default:
+
+                    break;
             }
-            else
-            {
-                Client.SendTextMessageAsync(message.Chat.Id, $"Неверно введен радиус,введите заново радиус");
-                userState.ConversationState = ConversationState.Reg;
-            }
-          
+
             return userState;
         }
     }

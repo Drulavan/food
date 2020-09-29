@@ -35,7 +35,7 @@ namespace FoodBot.Conversations
             }
             else
             {
-                Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Я раздаю еду!", replyMarkup: keyboard);
+                Client.SendTextMessageAsync(message.Chat.Id, $"Привет! Этот бот помогает участвовать в фудшеринге, то есть раздачах еды. Бот может присылать уведомления о предложениях забрать излишки еды: он будет ориентироваться на Ваше местоположение и предпочтения. Узнать больше о фудшеринге можно на сайте 1mlntons.ru\n Для начала, пожалуйста, укажите Ваше местоположение.", replyMarkup: keyboard);
 
                 userState.ConversationState = ConversationState.Oreg;
             }

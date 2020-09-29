@@ -60,7 +60,7 @@ namespace FoodBot.Conversations
                         ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP)))*/
                 {
                     userState.SityName = "Москва";
-                    Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
+                    Client.SendTextMessageAsync(message.Chat.Id, $"Укажите радиус поиска предложений (в километрах)");
                     userState.IsRegistered = true;
 
                     userState.ConversationState = ConversationState.Reg;
@@ -68,14 +68,14 @@ namespace FoodBot.Conversations
                 else if ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP))
                 {
                     userState.SityName = "Санкт-Петербург";
-                    Client.SendTextMessageAsync(message.Chat.Id, $"Напишите радиус поиска");
+                    Client.SendTextMessageAsync(message.Chat.Id, $"Укажите радиус поиска предложений (в километрах)");
                     userState.IsRegistered = true;
 
                     userState.ConversationState = ConversationState.Reg;
                 }
                 else
                 {
-                    Client.SendTextMessageAsync(message.Chat.Id, $"К сожалению в Вашем городе не работаем");
+                    Client.SendTextMessageAsync(message.Chat.Id, $"К сожалению, мы пока что не работаем в Вашем городе.Следите за новостями фудшеринга на @onemlntons");
                 }
 
 
@@ -85,7 +85,7 @@ namespace FoodBot.Conversations
             else
             {
                 Client.SendTextMessageAsync(message.Chat.Id, $"Неверно указаны данные геолокации");
-                Client.SendTextMessageAsync(message.Chat.Id, $"Ещё раз отправьте геолокацию", replyMarkup: keyboard);
+                Client.SendTextMessageAsync(message.Chat.Id, $"Ещё раз пожалуйста отправьте геолокацию", replyMarkup: keyboard);
                 userState.ConversationState = ConversationState.Oreg;
             }
 
