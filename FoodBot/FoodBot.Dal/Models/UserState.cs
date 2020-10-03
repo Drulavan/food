@@ -19,6 +19,8 @@ namespace FoodBot.Dal.Models
 
         public string[] menuCat { get; set; }
 
+        public List<string> MenuListCat { get; set; }
+
         /// <summary>
         /// Группы ВК выбранные пользователем
         /// </summary>
