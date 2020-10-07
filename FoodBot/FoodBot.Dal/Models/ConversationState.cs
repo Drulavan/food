@@ -12,7 +12,11 @@
 
        END,
 
-       DelCL
+       DelCL,
+
+       RadNew,
+
+       GeoNew
        
 
     }
