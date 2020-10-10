@@ -52,13 +52,17 @@ namespace FoodBot.Conversations
                                                                    new KeyboardButton("Удалить категорию"),
                                                                      new KeyboardButton("Добавить категорию")
                                                    },
-                                                   //        new[] //
-                                                   //{
+                                                           new[] //
+                                                   {
 
-                                                   //                new KeyboardButton("Изменить радиус поиска"),
-                                                   //                  new KeyboardButton("Изменить геолокацию")
-                                                   //},
+                                                                   new KeyboardButton("Изменить радиус поиска"),
+                                                                     new KeyboardButton("Изменить геолокацию")
+                                                   },
+                                                              new[] //
+                                                   {
+                                                                 new KeyboardButton("Пройти регистрацию заново")
 
+                                                   },
                },
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
@@ -95,6 +99,20 @@ namespace FoodBot.Conversations
                 ResizeKeyboard = true,
                 OneTimeKeyboard = true
             };
+            var keyboard2 = new ReplyKeyboardMarkup
+            {
+                Keyboard = new[] {
+                                          new[] // row 1
+                                                {
+                                                               new KeyboardButton("Геолокация")
+                                                               {
+                                                                   RequestLocation = true
+                                                               }
+                                                },
+          },
+                ResizeKeyboard = true,
+                OneTimeKeyboard = true
+            };
             switch (message.Text)
             {
                 case "Просмотреть список категории":
@@ -123,21 +141,29 @@ namespace FoodBot.Conversations
                     userState.ConversationState = ConversationState.SeX;
 
                     break;
-                //case "Изменить радиус поиска":
-                //    Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите удалить", replyMarkup: keyboard1);
-                //    userState.ConversationState = ConversationState.DelCL;
+                case "Изменить радиус поиска":
+                    Client.SendTextMessageAsync(message.Chat.Id, $"Укажите радиус поиска предложений (в километрах)");
+                    userState.ConversationState = ConversationState.RadNew;
 
-                //    break;
-                //case "Изменить геолокацию":
-                //    Client.SendTextMessageAsync(message.Chat.Id, $"Выберите категорию, которую хотите добавить", replyMarkup: keyboard1);
-                //    userState.ConversationState = ConversationState.SeX;
+                    break;
+                case "Изменить геолокацию":
+                    Client.SendTextMessageAsync(message.Chat.Id, $" Пожалуйста, укажите Ваше местоположение.", replyMarkup: keyboard2);
+                    userState.ConversationState = ConversationState.GeoNew;
 
-                //    break;
+                    break;
+                case "Пройти регистрацию заново":
+                    userState.IsRegistered = false;
+
+                    Client.SendTextMessageAsync(message.Chat.Id, $" Пожалуйста, укажите Ваше местоположение.", replyMarkup: keyboard2);
+                    userState.ConversationState = ConversationState.Oreg;
+                    
+                    break;
 
                 default:
                     Client.SendTextMessageAsync(message.Chat.Id, "Введите одну из команд", replyMarkup: keyboard);
                     break;
             }
+           // Console.WriteLine(userState.RadiusFind);
             //userState.ConversationState = ConversationState.None;
             // Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!");
             return userState;
