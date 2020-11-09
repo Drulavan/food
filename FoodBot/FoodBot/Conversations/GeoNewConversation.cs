@@ -60,23 +60,39 @@ namespace FoodBot.Conversations
                         ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP)))*/
                 {
                     userState.SityName = "Москва";
-                   
-                    userState.IsRegistered = true;
-                    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!\n" +
-                      "Для открытие меню наберите любой символ ");
 
-                    userState.ConversationState = ConversationState.END;
+                    if (userState.IsNewRegistered == true)
+                    {
+                       
+                    } Client.SendTextMessageAsync(message.Chat.Id, $"Укажите радиус поиска предложений (в километрах)");
+                        userState.ConversationState = ConversationState.RadNew;
+                    //else
+                    //{
+                    //  //  userState.IsRegistered = true;
+                    //    Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!\n" +
+                    //      "Для открытия меню наберите любой символ ");
+
+
+                    //    userState.ConversationState = ConversationState.END;
+                    //}
 
                 }
                 else if ((userState.UsrLatitude > minusLatP && userState.UsrLatitude < plusLatP) && (userState.UsrLongitude > minusLotP && userState.UsrLongitude < plusLotP))
                 {
                     userState.SityName = "Санкт-Петербург";
-                   
-                    userState.IsRegistered = true;
+                    if (userState.IsNewRegistered == true)
+                    {
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Укажите радиус поиска предложений (в километрах)");
+                        userState.ConversationState = ConversationState.RadNew; 
+                    }else
+                    {
+                  //  userState.IsRegistered = true;
                     Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!\n" +
-                      "Для открытие меню наберите любой символ ");
+                      "Для открытия меню наберите любой символ ");
 
-                    userState.ConversationState = ConversationState.END;
+                       // userState.IsRegistered = true;
+                        userState.ConversationState = ConversationState.END;
+                    }
 
                 }
                 else

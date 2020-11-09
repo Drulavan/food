@@ -10,7 +10,8 @@ namespace FoodBot.Conversations
     {
 
         bool isInt;
-        int Radius;
+    
+        float Radius;
         public RegistrationConversation(TelegramBotClient client) : base(client)
         {
         }
@@ -52,10 +53,10 @@ namespace FoodBot.Conversations
                    OneTimeKeyboard = true
                };
 
-               
-            // Client.SendTextMessageAsync(message.Chat.Id, "Хотите зарегистрироваться?", replyMarkup: keyboard);
 
-            isInt = Int32.TryParse(message.Text, out Radius);
+            // Client.SendTextMessageAsync(message.Chat.Id, "Хотите зарегистрироваться?", replyMarkup: keyboard);
+           
+            isInt = float.TryParse(message.Text.Replace(".", ","), out Radius);
             if (isInt == true)
             {
 

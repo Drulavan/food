@@ -1,4 +1,4 @@
-using FoodBot.Dal.Models;
+﻿using FoodBot.Dal.Models;
 using FoodBot.Parsers;
 using Telegram.Bot;
 using Telegram.Bot.Types;
@@ -11,14 +11,14 @@ using System.Collections.Generic;
 
 namespace FoodBot.Conversations
 {
-    internal class SXConversation : ConversationBase, IConversation
+    internal class NewCatMenuConversation : ConversationBase, IConversation
     {
-        List<string> MenuList = new List<string>();
-        public SXConversation(TelegramBotClient client) : base(client)
+      
+        public NewCatMenuConversation(TelegramBotClient client) : base(client)
         {
         }
 
-        public ConversationState ConversationState => ConversationState.SeX;
+        public ConversationState ConversationState => ConversationState.CatNew;
 
         public UserState Execute(Message message, UserState userState)
         {
@@ -60,10 +60,14 @@ namespace FoodBot.Conversations
                 case "Закрыть меню выбора":
                     Client.SendTextMessageAsync(message.Chat.Id, "Отлично! Здесь я буду показывать предложения для Вас!\n" +
                         "Для открытия меню наберите любой символ ");
-                    userState.MenuListCat = MenuList;
-                    userState.menuCat = MenuList.ToArray();
+                   
+                    //userState.MenuListCat = MenuList;
+                    userState.menuCat = userState.MenuListCat.ToArray();
+                    userState.IsNewRegistered = false;
+                    userState.IsRegistered = true;
                     userState.ConversationState = ConversationState.END;
                     break;
+
                 case "Мясо":
                 case "Рыба":
                 case "Выпечка":
@@ -72,16 +76,21 @@ namespace FoodBot.Conversations
                 case "Молочная продукция":
                 case "Крупы":
                 case "Сладости":
-                    if (MenuList.Contains(message.Text) == true)
+                    if (userState.MenuListCat.Contains(message.Text) == true)
                     {
                         Client.SendTextMessageAsync(message.Chat.Id, $"Вы уже выбрали данную категорию. Выберите другую категорию продуктов, которые Вы готовы забирать", replyMarkup: keyboard);
                         //userState.ConversationState = ConversationState.SeX;
                     }
-                    else
+                   else if (userState.MenuListCat.Contains(message.Text) == false)
                     {
-                        MenuList.Add(message.Text);
                         Client.SendTextMessageAsync(message.Chat.Id, $"Добавить ещё одну категорию?", replyMarkup: keyboard);
                         //userState.ConversationState = ConversationState.SeX;
+                    }
+                    else
+                    {
+                        userState.MenuListCat.Add(message.Text);
+                        Client.SendTextMessageAsync(message.Chat.Id, $"Добавить ещё одну категорию?", replyMarkup: keyboard);
+                        userState.ConversationState = ConversationState.CatNew;
                     }
                     break;
                 default:
@@ -89,7 +98,7 @@ namespace FoodBot.Conversations
                     break;
 
             }
-         
+       
             return userState;
         }
     }
