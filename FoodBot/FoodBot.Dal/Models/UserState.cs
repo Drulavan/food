@@ -13,9 +13,10 @@ namespace FoodBot.Dal.Models
         public long Id { get; set; }
         public float UsrLatitude { get; set; }
         public float UsrLongitude { get; set; }
-        public int RadiusFind { get; set; }
+        public float RadiusFind { get; set; }
         public string SityName { get; set; }
         public bool IsRegistered { get; set; }
+       public bool IsNewRegistered { get; set; }
 
         public string[] menuCat { get; set; }
 
